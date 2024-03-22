@@ -1,0 +1,120 @@
+import { create } from "zustand";
+
+type ShopItems = {
+	CurrentShop: Shop;
+	ShopItems: ShopItem[] | null;
+	categorizedItems: Record<string, ShopItem[]>; // New state for categorized items
+	CartItems: CartItem[];
+	cartWeight: number; // New state for tracking cart weight
+	cartValue: number; // New state for tracking cart value
+	setCurrentShop: (shop: Shop) => void;
+	setShopItems: (items: ShopItem[]) => void;
+	addItemToCart: (item: ShopItem, amount?: number) => void;
+	removeItemFromCart: (itemName: string, amount?: number, removeAll?: boolean) => void;
+	clearCart: () => void;
+	getShopItemData: (itemName: string) => ShopItem | undefined;
+};
+
+export const useStoreShop = create<ShopItems>((set, get) => ({
+	// Initial State
+	CurrentShop: null,
+	ShopItems: null,
+	categorizedItems: {}, // Initialize categorized items
+	CartItems: [],
+	cartWeight: 0, // Initialize cart weight
+	cartValue: 0, // Initialize cart value
+
+	setCurrentShop: (shop: Shop) => {
+		set(() => ({
+			CurrentShop: shop,
+		}));
+	},
+
+	setShopItems: (items: ShopItem[]) => {
+		const categorizedItems: Record<string, ShopItem[]> = {};
+
+		items.forEach((item) => {
+			const category = item.category || "Misc";
+			if (!categorizedItems[category]) {
+				categorizedItems[category] = [];
+			}
+			categorizedItems[category].push(item);
+		});
+
+		set(() => ({
+			ShopItems: [...items],
+			categorizedItems, // Update categorized items
+		}));
+	},
+
+	addItemToCart: (item: ShopItem, amount: number) => {
+		const { CartItems, cartWeight, cartValue } = get();
+		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.name === item.name);
+
+		let newCartWeight = cartWeight + item.weight; // Update cart weight
+		let newCartValue = cartValue + item.price; // Update cart value
+
+		if (existingItemIndex >= 0) {
+			// Item already exists in cart, increase quantity and update weight and value
+			const updatedCartItems = CartItems.map((cartItem, index) => (index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem));
+			set(() => ({
+				CartItems: updatedCartItems,
+				cartWeight: newCartWeight,
+				cartValue: newCartValue,
+			}));
+		} else {
+			// Item not in cart, add new item
+			const newItem = { name: item.name, quantity: amount || 1, weight: item.weight, price: item.price };
+			set(() => ({
+				CartItems: [...CartItems, newItem],
+				cartWeight: newCartWeight,
+				cartValue: newCartValue,
+			}));
+		}
+	},
+
+	removeItemFromCart: (itemName: string, amount?: number, removeAll: boolean = false) => {
+		const { CartItems, cartWeight, cartValue, getShopItemData } = get();
+		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.name === itemName);
+
+		if (existingItemIndex >= 0) {
+			const existingItem = CartItems[existingItemIndex];
+			let itemWeightReduction = getShopItemData(existingItem.name).weight * (removeAll ? existingItem.quantity : amount || 1);
+			let itemValueReduction = getShopItemData(existingItem.name).price * (removeAll ? existingItem.quantity : amount || 1);
+
+			if (existingItem.quantity > 1 && !removeAll) {
+				// Decrease quantity by 1, update weight and value
+				const updatedCartItems = CartItems.map((cartItem, index) => (index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem));
+				set(() => ({
+					CartItems: updatedCartItems,
+					cartWeight: cartWeight - itemWeightReduction,
+					cartValue: cartValue - itemValueReduction,
+				}));
+			} else {
+				// Remove item entirely, update weight and value
+				const updatedCartItems = CartItems.filter((_, index) => index !== existingItemIndex);
+				set(() => ({
+					CartItems: updatedCartItems,
+					cartWeight: cartWeight - itemWeightReduction,
+					cartValue: cartValue - itemValueReduction,
+				}));
+			}
+		}
+	},
+
+	clearCart: () => {
+		set(() => ({
+			CartItems: [],
+			cartWeight: 0, // Reset cart weight
+			cartValue: 0, // Reset cart value
+		}));
+	},
+
+	getShopItemData: (itemName: string) => {
+		const { ShopItems } = get();
+		if (ShopItems) {
+			return ShopItems.find((item) => item.name === itemName);
+		}
+		return undefined; // Return undefined if the item is not found or if ShopItems is null
+	},
+}));

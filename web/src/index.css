@@ -1,0 +1,48 @@
+@import url("https://use.typekit.net/sae5fzu.css");
+
+body {
+	margin: 0;
+	font-family: "greycliff-cf", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	user-select: none;
+	background-color: transparent !important;
+	overflow: hidden;
+}
+
+:root {
+	color-scheme: only light !important;
+}
+
+#root {
+	height: 100%;
+	background-color: transparent !important;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 3px;
+	border-radius: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: rgb(95, 95, 95);
+	border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 3px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
