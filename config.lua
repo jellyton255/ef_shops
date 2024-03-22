@@ -168,7 +168,7 @@ return {
 			label = "Ammunation",
 			targetLabel = "Open Ammunation",
 			model = {
-				`s_m_m_ammudefaultStockry`,
+				`S_M_M_AmmuCountry`,
 				`S_M_Y_AmmuCity_01`,
 				`MP_M_WareMech_01`,
 				`A_M_M_Farmer_01`,
