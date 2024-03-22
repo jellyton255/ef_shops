@@ -29,7 +29,7 @@ local function setShopVisible(shouldShow)
 	SendReactMessage("setVisible", shouldShow)
 end
 
----@param data { type: string, location: string }
+---@param data { type: string, location: integer }
 local function openShop(data)
 	lib.print.debug("Opening shop: " .. data.type, "Location: " .. data.location)
 

@@ -12,6 +12,9 @@
 ---@field blip { sprite: number, color: number, scale?: number, disabled: boolean } blip data for the shop
 ---@field groups? table<string, number> map of group names to min grade required to access the shop
 ---@field targetLabel? string the label of the target option to open the shop
+---@field targetIcon? string the font awesome icon of the target option to open the shop
+---@field requiredItem? string | string[] the item(s) required to access the shop
+---@field scenario? string the scenario to play for the shop vendor
 
 ---@class ShopConfig
 ---@field fluctuatePrices boolean whether or not prices should fluctuate when the shop is restocked (registered)
