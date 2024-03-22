@@ -166,47 +166,6 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 	return true
 end)
 
-local function shopFilter(filter, shop)
-	for i = 1, #filter do
-		local pattern = filter[i]
-
-		if shop:match(pattern) then
-			return true
-		end
-	end
-
-	return false
-end
-
-local shopFilters = {
-	"policeArmory",
-	"ammunation",
-	"hunting",
-}
-
-exports.ef_shops:registerHook('itemPurchased', function(payload)
-	if not shopFilter(shopFilters, payload.shopId) then return end
-
-	local source = payload.source
-	local player = exports.qbx_core:GetPlayer(source)
-
-	if not player then return end
-
-	local owner = player.PlayerData.charinfo.firstname .. " " .. player.PlayerData.charinfo.lastname
-	local notes = (payload.shopId == "policeArmory") and ("Law Enforcement - Issued By: " .. owner .. " | On: " .. os.date('%x')) or ("Weapon Purchase on " .. os.date('%x'))
-
-	for index, item in ipairs(payload.items) do
-		if not item.metadata or not item.metadata.serial then return end
-
-		local itemData = ITEMS[item.name]
-
-		local imageurl = GetItemIcon(item.name)
-
-		exports['ps-mdt']:CreateWeaponInfo(item.metadata.serial, imageurl or "", notes, owner, itemData.caliber, itemData.label, source)
-		lib.print.info("New " .. itemData.label .. ") registered in MDT for " .. player.PlayerData.name .. " (" .. owner .. "). Purchased at: " .. payload.shopId .. " (" .. payload.shopLocation .. ")")
-	end
-end)
-
 AddEventHandler('onResourceStart', function(resource)
 	if GetCurrentResourceName() ~= resource and "ox_inventory" ~= resource then return end
 
