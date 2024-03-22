@@ -14,7 +14,11 @@ function GetItemIcon(item)
 		return
 	end
 
-	local path = ("web/images/%s"):format((itemData.client and itemData.client.image) or (item .. ".png"))
+	if itemData?.client?.image then
+		return itemData?.client?.image
+	end
+
+	local path = ("web/images/%s"):format(item .. ".png")
 	local resourceFile = LoadResourceFile("ox_inventory", path)
 
 	return resourceFile and "nui://ox_inventory/" .. path or resourceFile
