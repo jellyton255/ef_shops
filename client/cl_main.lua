@@ -133,6 +133,7 @@ CreateThread(function()
 					label = storeData.targetLabel or "Browse Shop",
 					icon = storeData.targetIcon or "fas fa-cash-register",
 					items = storeData.requiredItem,
+					groups = storeData.groups,
 					onSelect = function()
 						openShop({ type = shopID, location = locationIndex })
 					end
