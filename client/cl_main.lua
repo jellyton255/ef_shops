@@ -102,10 +102,10 @@ end)
 
 CreateThread(function()
 	for shopID, storeData in pairs(config.locations) do
-		if not storeData.model or not next(storeData.model) then
-			lib.print.error("No model found for shop: " .. shopID)
-			goto continue
-		end
+		-- if not storeData.model or not next(storeData.model) then
+		-- 	lib.print.error("No model found for shop: " .. shopID)
+		-- 	goto continue
+		-- end
 
 		for locationIndex, locationCoords in pairs(storeData.coords) do
 			if not storeData.blip.disabled then
@@ -125,7 +125,6 @@ CreateThread(function()
 				Blips[#Blips + 1] = StoreBlip
 			end
 
-			local model = storeData.model[math.random(1, #storeData.model)]
 
 			local targetOptions = {
 				{
@@ -134,55 +133,85 @@ CreateThread(function()
 					icon = storeData.targetIcon or "fas fa-cash-register",
 					items = storeData.requiredItem,
 					groups = storeData.groups,
+					coords = locationCoords,
+					radius = storeData.radius,
 					onSelect = function()
 						openShop({ type = shopID, location = locationIndex })
 					end
 				}
 			}
 
-			local createEntity
-			local deleteEntity
-			if IsModelAPed(model) then
-				function createEntity()
-					Vendors[shopID .. locationIndex] = CreatePed(0, model, locationCoords.x, locationCoords.y, locationCoords.z - 1.0, locationCoords.a, false, false)
-					SetEntityInvincible(Vendors[shopID .. locationIndex], true)
-					TaskStartScenarioInPlace(Vendors[shopID .. locationIndex], storeData.scenario or scenarios[math.random(1, #scenarios)], -1, true)
-					SetBlockingOfNonTemporaryEvents(Vendors[shopID .. locationIndex], true)
-					SetEntityNoCollisionEntity(Vendors[shopID .. locationIndex], cache.ped, false)
-					FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
+			if storeData.model then
+				local model = storeData.model[math.random(1, #storeData.model)]
+
+				local createEntity
+				local deleteEntity
+				if IsModelAPed(model) then
+					function createEntity()
+						Vendors[shopID .. locationIndex] = CreatePed(0, model, locationCoords.x, locationCoords.y, locationCoords.z - 1.0, locationCoords.a, false, false)
+						SetEntityInvincible(Vendors[shopID .. locationIndex], true)
+						TaskStartScenarioInPlace(Vendors[shopID .. locationIndex], storeData.scenario or scenarios[math.random(1, #scenarios)], -1, true)
+						SetBlockingOfNonTemporaryEvents(Vendors[shopID .. locationIndex], true)
+						SetEntityNoCollisionEntity(Vendors[shopID .. locationIndex], cache.ped, false)
+						FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
+					end
+
+					function deleteEntity()
+						DeletePed(Vendors[shopID .. locationIndex])
+					end
+				else
+					function createEntity()
+						Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, 0, 0, 0)
+						SetEntityHeading(Vendors[shopID .. locationIndex], locationCoords.w)
+						FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
+					end
+
+					function deleteEntity()
+						RemoveEntity(Vendors[shopID .. locationIndex])
+					end
 				end
 
-				function deleteEntity()
-					DeletePed(Vendors[shopID .. locationIndex])
+				local point = lib.points.new(locationCoords, 25)
+				function point:onEnter()
+					if not Vendors[shopID .. locationIndex] or (Vendors[shopID .. locationIndex] and not DoesEntityExist(Vendors[shopID .. locationIndex])) then
+						while not HasModelLoaded(model) do
+							lib.requestModel(model)
+						end
+						createEntity()
+					end
+
+					exports.ox_target:addLocalEntity(Vendors[shopID .. locationIndex], targetOptions)
+				end
+
+				function point:onExit()
+					deleteEntity()
 				end
 			else
-				function createEntity()
-					Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, 0, 0, 0)
-					SetEntityHeading(Vendors[shopID .. locationIndex], locationCoords.w)
-					FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
+				local point = lib.points.new(locationCoords, 25)
+				function point:onEnter()
+					exports.ox_target:addSphereZone({
+						coords = locationCoords,
+						radius = storeData.radius,
+						options = {
+							{
+								name = storeData.label,
+								label = storeData.targetLabel or "Browse Shop",
+								icon = storeData.icon,
+								groups = storeData.groups,
+								items = storeData.items,
+								onSelect = function()
+									openShop({ type = shopID, location = locationIndex })
+								end,
+								distance = 1.0,
+							},
+						},
+					})
 				end
 
-				function deleteEntity()
-					RemoveEntity(Vendors[shopID .. locationIndex])
+				function point:onExit()
+					exports.ox_target:removeZone(storeData.label)
 				end
 			end
-
-			local point = lib.points.new(locationCoords, 25)
-			function point:onEnter()
-				if not Vendors[shopID .. locationIndex] or (Vendors[shopID .. locationIndex] and not DoesEntityExist(Vendors[shopID .. locationIndex])) then
-					while not HasModelLoaded(model) do
-						lib.requestModel(model)
-					end
-					createEntity()
-				end
-
-				exports.ox_target:addLocalEntity(Vendors[shopID .. locationIndex], targetOptions)
-			end
-
-			function point:onExit()
-				deleteEntity()
-			end
-
 			Points[#Points + 1] = point
 		end
 

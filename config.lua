@@ -6,9 +6,10 @@
 
 ---@class ShopLocation
 ---@field label string the label of the shop location
----@field model number[] | string[] hash of model (ped/object) to pick from when spawning a shop vendor
----@field coords vector4[] coordinates of shop locations
+---@field model? number[] | string[] hash of model (ped/object) to pick from when spawning a shop vendor
+---@field coords vector4[] | vector3[] coordinates of shop locations
 ---@field shopItems string which table to pull shop items from
+---@field radius number? radus used in absense of supplied ped for sphere zone
 ---@field blip { sprite: number, color: number, scale?: number, disabled: boolean } blip data for the shop
 ---@field groups? table<string, number> map of group names to min grade required to access the shop
 ---@field targetLabel? string the label of the target option to open the shop
@@ -219,3 +220,18 @@ return {
 		},
 	}
 }
+
+--Example sphere zone config.
+--[[emsarmory = {
+	label = "EMS Armory",
+	radius = 1,
+	coords = {
+		vector3(325.32, -590.77, 43.26)
+	},
+	groups = { ['ambulance'] = 0 },
+	shopItems = "emsarmory",
+	blip = {
+		sprite = 80,
+		color = 6,
+	}
+},]]--
