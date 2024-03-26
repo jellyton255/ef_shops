@@ -17,5 +17,8 @@ A shops system made in React for qbx_core and ox_inventory
 - [ox_lib](https://github.com/overextended/ox_lib)
 - [ox_inventory](https://github.com/overextended/ox_inventory) 
 
+## Contributing
+This repo uses the QBox Project contribution guidelines. You can view those here: https://docs.qbox.re/contributors.
+
 ## Copyright
 Copyright © 2024 Everfall https://www.everfallcommunity.com/
