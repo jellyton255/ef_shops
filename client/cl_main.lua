@@ -162,7 +162,7 @@ CreateThread(function()
 				end
 
 				function deleteEntity()
-					RemoveEntity(Vendors[shopID .. locationIndex])
+					exports.ox_target:removeEntity(Vendors[shopID .. locationIndex])
 				end
 			end
 
