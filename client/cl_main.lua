@@ -195,7 +195,9 @@ CreateThread(function()
 			function point:onEnter()
 				if not Vendors[shopID .. locationIndex] or (Vendors[shopID .. locationIndex] and not DoesEntityExist(Vendors[shopID .. locationIndex])) then
 					while not HasModelLoaded(model) do
+							pcall(function()
 						lib.requestModel(model)
+							end)
 					end
 					createEntity()
 				end
