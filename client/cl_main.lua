@@ -10,6 +10,7 @@ local ITEMS = exports.ox_inventory:Items()
 local Vendors = {}
 local Points = {}
 local Blips = {}
+local Targets = {}
 
 ShopOpen = false
 
@@ -162,6 +163,7 @@ CreateThread(function()
 				}
 			}
 
+			if model then -- Create entity target
 			local createEntity
 			local deleteEntity
 			if IsModelAPed(model) then
@@ -206,6 +208,15 @@ CreateThread(function()
 			end
 
 			Points[#Points + 1] = point
+			else -- Create normal target point
+				local target = exports.ox_target:addSphereZone({
+					coords = locationCoords,
+					options = targetOptions,
+					radius = storeData.target?.radius
+				})
+
+				Targets[#Targets + 1] = target
+			end
 		end
 
 		:: continue ::
@@ -229,5 +240,9 @@ AddEventHandler('onResourceStop', function(resource)
 
 	for _, blip in ipairs(Blips) do
 		RemoveBlip(blip)
+	end
+
+	for _, target in ipairs(Targets) do
+		exports.ox_target:removeZone(target)
 	end
 end)
