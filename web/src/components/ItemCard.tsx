@@ -61,17 +61,7 @@ function ItemCard(props: { item: ShopItem }) {
 							)}
 						</Group>
 						<Group h="100%">
-							<Image
-								src={item.imagePath}
-								alt={item.label}
-								fallbackSrc="https://files.jellyton.me/ShareX/2024/02/Everfall_-_White_-_Steam.png"
-								w="75%"
-								h="100%"
-								mx="auto"
-								mt={-5}
-								my="auto"
-								fit="contain"
-							/>
+							<Image src={item.imagePath} alt={item.label} fallbackSrc="./Box.png" w="75%" h="100%" mx="auto" mt={-5} my="auto" fit="contain" />
 						</Group>
 						<Text fz={20} fw={600} ta="center" mt={-5}>
 							{item.label}
