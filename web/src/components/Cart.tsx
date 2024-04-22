@@ -46,14 +46,14 @@ function Cart() {
 									if (value === item.quantity) return;
 
 									if (value > item.quantity) {
-										const canAffordCash = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Cash;
-										const canAffordCard = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Bank;
-										const overWeight = Weight + cartWeight + (storeItem.weight || 0) > MaxWeight;
-
-										if (overWeight || (!canAffordCash && !canAffordCard)) return;
 										addItemToCart(getShopItemData(item.name), value - item.quantity);
 									} else removeItemFromCart(item.name, item.quantity - value);
 								}}
+								isAllowed={(values) => {
+									const canAffordCash = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Cash;
+									const canAffordCard = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Bank;
+									const overWeight = Weight + cartWeight + (storeItem.weight || 0) * values.floatValue > MaxWeight;
+									if (overWeight) {
 										notifications.show({
 											title: "Too Heavy",
 											message: `You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`,
@@ -61,6 +61,10 @@ function Cart() {
 											color: "red",
 											classNames: classes,
 										});
+										return false;
+									}
+
+									if (!canAffordCash && !canAffordCard) {
 										notifications.show({
 											title: "Cannot Afford",
 											message: `You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`,
@@ -68,6 +72,11 @@ function Cart() {
 											color: "red",
 											classNames: classes,
 										});
+										return false;
+									}
+
+									return true;
+								}}
 								min={1}
 								allowDecimal={false}
 								allowNegative={false}
