@@ -1,9 +1,8 @@
 {
 	"name": "everfall-shops",
+	"type": "module",
 	"homepage": "web/build",
 	"private": true,
-	"version": "1.0.0",
-	"type": "module",
 	"scripts": {
 		"start": "vite --host",
 		"start:game": "vite build --watch",
@@ -11,25 +10,26 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.11.3",
-		"@fortawesome/fontawesome-svg-core": "^6.5.1",
+		"@emotion/react": "^11.11.4",
+		"@fortawesome/fontawesome-svg-core": "^6.5.2",
 		"@fortawesome/free-solid-svg-icons": "^6.5.2",
 		"@fortawesome/react-fontawesome": "0.2.0",
-		"@mantine/core": "^7.5.2",
-		"@mantine/dates": "7.5.2",
-		"@mantine/hooks": "^7.5.2",
-		"@mantine/modals": "^7.5.2",
+		"@mantine/core": "^7.8.0",
+		"@mantine/dates": "7.8.0",
+		"@mantine/hooks": "^7.8.0",
+		"@mantine/modals": "^7.8.0",
+		"@mantine/notifications": "^7.8.0",
 		"dayjs": "^1.11.10",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"zustand": "^4.5.0"
+		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
-		"@fortawesome/fontawesome-common-types": "^6.5.1",
-		"@types/react": "^18.2.55",
-		"@types/react-dom": "^18.2.19",
+		"@fortawesome/fontawesome-common-types": "^6.5.2",
+		"@types/react": "^18.2.79",
+		"@types/react-dom": "^18.2.25",
 		"@vitejs/plugin-react": "^4.2.1",
-		"typescript": "^5.3.3",
-		"vite": "^5.1.1"
+		"typescript": "^5.4.5",
+		"vite": "^5.2.10"
 	}
 }
