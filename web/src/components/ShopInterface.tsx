@@ -3,7 +3,7 @@ import { useState } from "react";
 import { fetchNui } from "../utils/fetchNui";
 import { useStoreShop } from "../stores/ShopStore";
 import { useStoreSelf } from "../stores/PlayerDataStore";
-import { faCreditCard, faMoneyBill1Wave, faWeightHanging } from "@fortawesome/pro-solid-svg-icons";
+import { faCreditCard, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cart from "./Cart";
 import ShopGrid from "./ShopGrid";

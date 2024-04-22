@@ -1,4 +1,4 @@
-import { faBasketShopping, faFaceDisappointed, faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faBasketShopping, faCreditCard, faFaceFrown, faMoneyBill1Wave, faWeightHanging, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Text, Stack, Title, Group, ActionIcon, NumberInput, Paper, Badge, Button, NumberFormatter, Tooltip } from "@mantine/core";
 import { useMemo } from "react";
@@ -213,12 +213,14 @@ function Cart() {
 				<Stack gap={6} style={{ overflow: "auto" }} mb={CartItems?.length > 0 && "auto"}>
 					{CartItems?.length <= 0 && (
 						<Stack my="auto" gap={2} align="center">
+							<FontAwesomeIcon icon={faFaceFrown} size="2x" />
 							<Title order={3}>No Items in Cart</Title>
 						</Stack>
 					)}
 					{currentCartItems}
 				</Stack>
 
+				<PaymentButtons />
 				</Stack>
 		),
 
