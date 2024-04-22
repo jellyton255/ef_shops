@@ -6,5 +6,5 @@ export const isEnvBrowser = (): boolean => !(window as any).invokeNative;
 export const noop = () => {};
 
 export function formatMoney(amount: number) {
-	return amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
