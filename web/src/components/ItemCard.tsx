@@ -2,6 +2,7 @@ import { Text, Image, Grid, Stack, Group, Paper, Tooltip } from "@mantine/core";
 import { useStoreShop } from "../stores/ShopStore";
 import { useStoreSelf } from "../stores/PlayerDataStore";
 import { useHover } from "@mantine/hooks";
+import { ShopItem } from "../types/ShopItem";
 
 function ItemCard(props: { item: ShopItem }) {
 	const { item } = props;
@@ -24,11 +25,7 @@ function ItemCard(props: { item: ShopItem }) {
 	return (
 		<Grid.Col span={3}>
 			<Tooltip
-				label={
-					(!hasLicense && "You need a " + item.license + " license to purchase this item.") ||
-					(canNotAfford && "You cannot afford this item.") ||
-					(overWeight && "You cannot carry this item.")
-				}
+				label={(!hasLicense && "You need a " + item.license + " license to purchase this item.") || (canNotAfford && "You cannot afford this item.") || (overWeight && "You cannot carry this item.")}
 				disabled={!canNotAfford && !overWeight}>
 				<Paper
 					w="100%"
