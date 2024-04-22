@@ -98,12 +98,13 @@ function Cart() {
 
 	return useMemo(
 		() => (
-			<Box h="91%">
-				<Group justify="space-between" mb={4}>
+			<Stack h="100%" gap={12} justify="space-between">
+				<Group justify="space-between">
 					<Group gap={10} mx={4}>
 						<FontAwesomeIcon size="lg" icon={faBasketShopping} />
 						<Title order={3}>Cart</Title>
 					</Group>
+
 					<Text fz={18} fw={500} mx={4}>
 						<Text fw={700} fz={19} component="span">
 							Total:{" "}
@@ -111,21 +112,17 @@ function Cart() {
 						${formatMoney(CartItems?.reduce((acc, item) => acc + getShopItemData(item.name).price * item.quantity, 0) || 0)}
 					</Text>
 				</Group>
-				{(CartItems?.length > 0 && (
-					<ScrollArea h="100%" scrollbarSize={4} scrollHideDelay={0}>
-						<Stack h="100%" gap={6}>
-							{currentCartItems}
-						</Stack>
-					</ScrollArea>
-				)) || (
-					<Center h="96%">
-						<Stack my="auto" gap={2}>
-							<FontAwesomeIcon icon={faFaceDisappointed} size="2x" />
+
+				<Stack gap={6} style={{ overflow: "auto" }} mb={CartItems?.length > 0 && "auto"}>
+					{CartItems?.length <= 0 && (
+						<Stack my="auto" gap={2} align="center">
 							<Title order={3}>No Items in Cart</Title>
 						</Stack>
-					</Center>
-				)}
-			</Box>
+					)}
+					{currentCartItems}
+				</Stack>
+
+				</Stack>
 		),
 
 		[CartItems]
