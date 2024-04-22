@@ -1,6 +1,7 @@
 import { useNuiEvent } from "./hooks/useNuiEvent";
 import { useStoreSelf } from "./stores/PlayerDataStore";
 import { useStoreShop } from "./stores/ShopStore";
+import { ShopItem } from "./types/ShopItem";
 
 function DataHander() {
 	const { setShopItems, setCurrentShop, clearCart } = useStoreShop();

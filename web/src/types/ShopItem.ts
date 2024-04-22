@@ -1,10 +1,10 @@
-type Shop = {
+export type Shop = {
 	id: string;
 	location: number;
 	label: string;
 };
 
-type ShopItem = {
+export type ShopItem = {
 	name: string;
 	label: string;
 	price: number;
@@ -17,7 +17,7 @@ type ShopItem = {
 	jobs?: Record<string, number>;
 };
 
-type CartItem = {
+export type CartItem = {
 	name: string;
 	quantity: number;
 };

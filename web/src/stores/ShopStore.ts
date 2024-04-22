@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { CartItem, Shop, ShopItem } from "../types/ShopItem";
 
 type ShopItems = {
 	CurrentShop: Shop;
