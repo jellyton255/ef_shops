@@ -7,6 +7,14 @@ import { formatMoney } from "../utils/misc";
 import { useStoreSelf } from "../stores/PlayerDataStore";
 import { notifications } from "@mantine/notifications";
 import classes from "./Style.module.css";
+					<NumberFormatter value={formatWeight(Weight)} suffix="kg" thousandSeparator />
+					{cartWeight > 0 && (
+						<Text component="span">
+							<NumberFormatter value={formatWeight(cartWeight)} prefix=" + " suffix="kg" thousandSeparator />
+						</Text>
+					)}
+					{" / "}
+					<NumberFormatter value={formatWeight(MaxWeight)} suffix="kg" thousandSeparator />
 
 function Cart() {
 	const { CartItems, addItemToCart, removeItemFromCart, getShopItemData, cartWeight } = useStoreShop();
