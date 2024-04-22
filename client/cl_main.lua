@@ -154,8 +154,8 @@ CreateThread(function()
 			local targetOptions = {
 				{
 					name = storeData.label,
-					label = storeData.targetLabel or "Browse Shop",
-					icon = storeData.targetIcon or "fas fa-cash-register",
+					label = storeData.target?.label or "Browse Shop",
+					icon = storeData.target?.icon or "fas fa-cash-register",
 					items = storeData.requiredItem,
 					onSelect = function()
 						openShop({ type = shopID, location = locationIndex })
