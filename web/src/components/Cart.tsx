@@ -120,7 +120,7 @@ function Cart() {
 	const currentCartItems = CartItems?.map((item) => {
 		const storeItem = getShopItemData(item.name);
 		var price = storeItem.price;
-		var title = <Title order={4}>{storeItem.label}</Title>;
+		var title = <Title order={5}>{storeItem.label}</Title>;
 
 		return (
 			<Paper key={item.name} p="sm">
@@ -221,7 +221,7 @@ function Cart() {
 				</Stack>
 
 				<PaymentButtons />
-				</Stack>
+			</Stack>
 		),
 
 		[CartItems]
