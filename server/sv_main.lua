@@ -4,14 +4,14 @@ if not lib.checkDependency('ox_lib', '3.0.0') then error() end
 if not lib.checkDependency('ox_inventory', '2.20.0') then error() end
 
 
-local config = require 'config'
+local config = require 'config.config'
 local TriggerEventHooks = require '@qbx_core.modules.hooks'
 
 local ox_inventory = exports.ox_inventory
 local ITEMS = ox_inventory:Items()
 
-local PRODUCTS = config.shopItems
-local LOCATIONS = config.locations
+local PRODUCTS = require 'config.shop_items' ---@type table<string, table<string, ShopItem>>
+local LOCATIONS = require 'config.locations' ---@type type<string, ShopLocation>
 
 ShopData = {}
 

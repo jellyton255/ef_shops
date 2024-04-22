@@ -2,9 +2,8 @@ if not lib.checkDependency('qbx_core', '1.6.0') then error() end
 if not lib.checkDependency('ox_lib', '3.0.0') then error() end
 if not lib.checkDependency('ox_inventory', '2.20.0') then error() end
 
-local config = require 'config'
-local PRODUCTS = config.shopItems ---@type type<string, ShopItem>
-local LOCATIONS = config.locations ---@type table<string, ShopLocation>
+local PRODUCTS = require 'config.shop_items' ---@type table<string, table<string, ShopItem>>
+local LOCATIONS = require 'config.locations' ---@type type<string, ShopLocation>
 
 local ITEMS = exports.ox_inventory:Items()
 
@@ -76,7 +75,7 @@ local function openShop(data)
 		},
 		licenses = QBX.PlayerData.metadata.licences
 	})
-	SendReactMessage("setCurrentShop", { id = data.type, location = data.location, label = config.locations[data.type].label })
+	SendReactMessage("setCurrentShop", { id = data.type, location = data.location, label = LOCATIONS[data.type].label })
 	SendReactMessage("setShopItems", shopItems)
 end
 
@@ -114,11 +113,7 @@ RegisterNUICallback("hideFrame", function(_, cb)
 end)
 
 CreateThread(function()
-	for shopID, storeData in pairs(config.locations) do
-		if not storeData.model or not next(storeData.model) then
-			lib.print.error("No model found for shop: " .. shopID)
-			goto continue
-		end
+	for shopID, storeData in pairs(LOCATIONS) do
 
 		for locationIndex, locationCoords in pairs(storeData.coords) do
 			if not storeData.blip.disabled then

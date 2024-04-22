@@ -30,12 +30,11 @@ server_scripts {
 }
 
 files {
-	'config.lua',
+	'config/**/*.lua',
 	'web/build/index.html',
 	'web/build/**/*',
 }
 
 depedencies {
 	'ox_lib',
-	'qbx_core',
 }
