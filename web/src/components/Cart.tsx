@@ -5,6 +5,8 @@ import { useMemo } from "react";
 import { useStoreShop } from "../stores/ShopStore";
 import { formatMoney } from "../utils/misc";
 import { useStoreSelf } from "../stores/PlayerDataStore";
+import { notifications } from "@mantine/notifications";
+import classes from "./Style.module.css";
 
 function Cart() {
 	const { CartItems, addItemToCart, removeItemFromCart, getShopItemData, cartWeight } = useStoreShop();
@@ -43,6 +45,20 @@ function Cart() {
 										addItemToCart(getShopItemData(item.name), value - item.quantity);
 									} else removeItemFromCart(item.name, item.quantity - value);
 								}}
+										notifications.show({
+											title: "Too Heavy",
+											message: `You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`,
+											icon: <FontAwesomeIcon icon={faWeightHanging} />,
+											color: "red",
+											classNames: classes,
+										});
+										notifications.show({
+											title: "Cannot Afford",
+											message: `You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`,
+											icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
+											color: "red",
+											classNames: classes,
+										});
 								min={1}
 								allowDecimal={false}
 								allowNegative={false}
