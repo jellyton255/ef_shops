@@ -41,6 +41,7 @@ function Cart() {
 								value={item.quantity}
 								max={storeItem.count}
 								clampBehavior="strict"
+								startValue={1}
 								onChange={(value: number) => {
 									if (value === item.quantity) return;
 
