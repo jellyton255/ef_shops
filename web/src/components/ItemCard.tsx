@@ -6,7 +6,7 @@ import { useHover } from "@mantine/hooks";
 function ItemCard(props: { item: ShopItem }) {
 	const { item } = props;
 	const { addItemToCart, cartValue, cartWeight, CartItems } = useStoreShop();
-	const { Weight, MaxWeight, Money, Licenses } = useStoreSelf();
+	const { Weight, MaxWeight, Money, Licenses, Job } = useStoreSelf();
 
 	const canNotAfford = cartValue + item.price > Money.Cash && cartValue + item.price > Money.Bank;
 	const overWeight = Weight + cartWeight + item.weight > MaxWeight;
@@ -15,8 +15,9 @@ function ItemCard(props: { item: ShopItem }) {
 	}, 0);
 	const inStock = !item.count || item.count > currentItemQuantityInCart;
 	const hasLicense = (!item.license && true) || (Licenses && Licenses[item.license]) == true;
+	const hasCorrectGrade = !item.jobs || (item.jobs && item.jobs[Job.name] && item.jobs[Job.name] <= Job.grade);
 
-	const disabled = canNotAfford || overWeight || !inStock || !hasLicense;
+	const disabled = canNotAfford || overWeight || !inStock || !hasLicense || !hasCorrectGrade;
 
 	const { hovered, ref } = useHover();
 

@@ -1,16 +1,22 @@
 import { create } from "zustand";
 
 type Money = {
-	Cash: number | null;
-	Bank: number | null;
+	Cash: number;
+	Bank: number;
+};
+
+type Job = {
+	name: string;
+	grade: number;
 };
 
 type SelfData = {
-	Weight: number | null;
-	MaxWeight: number | null;
+	Weight: number;
+	MaxWeight: number;
 	Money: Money;
+	Job: Job;
 	Licenses: Record<string, boolean> | null;
-	setSelfData: (config: { weight?: number; maxWeight?: number; money?: Money; licenses?: Record<string, boolean> }) => void;
+	setSelfData: (config: { weight?: number; maxWeight?: number; money?: Money; licenses?: Record<string, boolean>; job: Job }) => void;
 };
 
 export const useStoreSelf = create<SelfData>((set) => ({
@@ -20,6 +26,10 @@ export const useStoreSelf = create<SelfData>((set) => ({
 	Money: {
 		Cash: null,
 		Bank: null,
+	},
+	Job: {
+		name: null,
+		grade: null,
 	},
 	Licenses: null,
 
@@ -40,6 +50,12 @@ export const useStoreSelf = create<SelfData>((set) => ({
 		if (config.money) {
 			set(() => ({
 				Money: config.money,
+			}));
+		}
+
+		if (config.job) {
+			set(() => ({
+				Job: config.job,
 			}));
 		}
 

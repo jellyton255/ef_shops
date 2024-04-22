@@ -62,6 +62,19 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 	end
 
 	local shopData = LOCATIONS[purchaseData.shop.id]
+
+	if shopData.jobs then
+		if not shopData.jobs[QBX.PlayerData.job.name] then
+			lib.print.error("Invalid job: " .. QBX.PlayerData.job.name .. " for shop: " .. purchaseData.shop.id .. " called by: " .. GetPlayerName(source))
+			return
+		end
+
+		if shopData.jobs[QBX.PlayerData.job.name] > QBX.PlayerData.job.grade.level then
+			lib.print.error("Invalid job grade: " .. QBX.PlayerData.job.grade.level .. " for shop: " .. purchaseData.shop.id .. " called by: " .. GetPlayerName(source))
+			return
+		end
+	end
+
 	local currency = purchaseData.currency
 	local mappedCartItems = mapBySubfield(purchaseData.items, "name")
 	local validCartItems = {} ---@type OxItem[]
@@ -131,6 +144,18 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 		if not productData then
 			lib.print.error("Invalid product: " .. item.name .. " in shop: " .. shopType)
 			goto continue
+		end
+
+		if productData.jobs then
+			if not productData.jobs[QBX.PlayerData.job.name] then
+				lib.print.error("Invalid job: " .. QBX.PlayerData.job.name .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
+				goto continue
+			end
+
+			if productData.jobs[QBX.PlayerData.job.name] > QBX.PlayerData.job.grade.level then
+				lib.print.error("Invalid job grade: " .. QBX.PlayerData.job.grade.level .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
+				goto continue
+			end
 		end
 
 		local success, response = ox_inventory:AddItem(source, item.name, item.quantity, productData.metadata)

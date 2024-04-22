@@ -32,6 +32,14 @@ end
 ---@param data { type: string, location: integer }
 local function openShop(data)
 	lib.print.debug("Opening shop: " .. data.type, "Location: " .. data.location)
+	if shopData.jobs then
+		if (shopData.jobs[QBX.PlayerData.job.name] and shopData.jobs[QBX.PlayerData.job.name] <= QBX.PlayerData.job.grade.level) then
+			goto continue
+		else
+			lib.notify({ title = "Shop Access", description = "You do not have access to this shop.", type = "error" })
+			return
+		end
+	end
 
 	setShopVisible(true)
 
@@ -52,6 +60,7 @@ local function openShop(data)
 		item.category = productData.category
 		item.type = productData.type
 		item.imagePath = GetItemIcon(item.name)
+		item.jobs = productData.jobs
 	end
 
 	SendReactMessage("setSelfData", {
@@ -60,6 +69,10 @@ local function openShop(data)
 		money = {
 			Cash = QBX.PlayerData.money.cash,
 			Bank = QBX.PlayerData.money.bank
+		},
+		job = {
+			name = QBX.PlayerData.job.name,
+			grade = QBX.PlayerData.job.grade.level
 		},
 		licenses = QBX.PlayerData.metadata.licences
 	})

@@ -14,6 +14,7 @@ type ShopItem = {
 	type?: string;
 	category?: string;
 	license?: string;
+	jobs?: Record<string, number>;
 };
 
 type CartItem = {
