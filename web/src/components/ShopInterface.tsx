@@ -1,5 +1,4 @@
-import { Text, Stack, Title, Grid, Button, Skeleton, Group, NumberFormatter, Badge, Tooltip, CloseButton } from "@mantine/core";
-import { useState } from "react";
+import { Text, Stack, Title, Grid, Skeleton, Group, NumberFormatter, Badge, CloseButton, Flex } from "@mantine/core";
 import { fetchNui } from "../utils/fetchNui";
 import { useStoreShop } from "../stores/ShopStore";
 import { useStoreSelf } from "../stores/PlayerDataStore";
@@ -21,7 +20,11 @@ function ShopTitle() {
 			</Stack>
 		);
 
-	return <Title order={1}>{CurrentShop?.label}</Title>;
+	return (
+		<Title order={1} ml={20}>
+			{CurrentShop?.label}
+		</Title>
+	);
 }
 
 function PlayerData() {
@@ -37,15 +40,15 @@ function PlayerData() {
 		);
 
 	return (
-		<Group h="fit-content" gap={6} mr={390}>
-			<Badge size="lg" leftSection={<FontAwesomeIcon size="lg" icon={faMoneyBill1Wave} />} color="green" radius="sm" variant="light">
-				<Text fw={700} ta="right" mx={6}>
-					<NumberFormatter prefix="$" value={Money.Cash} thousandSeparator />
+		<Group h="fit-content" gap={6}>
+			<Badge size="xl" leftSection={<FontAwesomeIcon size="xl" icon={faMoneyBill1Wave} />} color="green" radius="sm" variant="light">
+				<Text fz={20} fw={700} ta="right" mx={6} lh={1}>
+					<NumberFormatter prefix="$" value={Money.Cash} thousandSeparator decimalScale={0} />
 				</Text>
 			</Badge>
-			<Badge size="lg" leftSection={<FontAwesomeIcon size="lg" icon={faCreditCard} />} color="blue" radius="sm" variant="light">
-				<Text fw={700} ta="right" mx={6}>
-					<NumberFormatter prefix="$" value={Money.Bank} thousandSeparator />
+			<Badge size="xl" leftSection={<FontAwesomeIcon size="xl" icon={faCreditCard} />} color="blue" radius="sm" variant="light">
+				<Text fz={20} fw={700} ta="right" mx={6} lh={1}>
+					<NumberFormatter prefix="$" value={Money.Bank} thousandSeparator decimalScale={0} />
 				</Text>
 			</Badge>
 		</Group>
@@ -54,11 +57,13 @@ function PlayerData() {
 
 function ShopInterface() {
 	return (
-		<Stack h="100%">
-			<Group w="100%" justify="space-between">
+		<Stack w="100%" h="100%">
+			<Group h="auto" w="100%" justify="space-between">
 				<ShopTitle />
+				<Group>
 				<PlayerData />
 				<CloseButton
+						size="xl"
 					onClick={() => {
 						if (!isEnvBrowser()) fetchNui("hideFrame");
 					}}
