@@ -149,8 +149,6 @@ CreateThread(function()
 				Blips[#Blips + 1] = StoreBlip
 			end
 
-			local model = storeData.model[math.random(1, #storeData.model)]
-
 			local targetOptions = {
 				{
 					name = storeData.label,
@@ -163,53 +161,55 @@ CreateThread(function()
 				}
 			}
 
+			local model = type(storeData.model) == "table" and storeData.model[math.random(1, #storeData.model)] or storeData.model
+
 			if model then -- Create entity target
-			local createEntity
-			local deleteEntity
-			if IsModelAPed(model) then
-				function createEntity()
-					Vendors[shopID .. locationIndex] = CreatePed(0, model, locationCoords.x, locationCoords.y, locationCoords.z - 1.0, locationCoords.a, false, false)
-					SetEntityInvincible(Vendors[shopID .. locationIndex], true)
-					TaskStartScenarioInPlace(Vendors[shopID .. locationIndex], storeData.scenario or scenarios[math.random(1, #scenarios)], -1, true)
-					SetBlockingOfNonTemporaryEvents(Vendors[shopID .. locationIndex], true)
-					SetEntityNoCollisionEntity(Vendors[shopID .. locationIndex], cache.ped, false)
-					FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
-				end
-
-				function deleteEntity()
-					DeletePed(Vendors[shopID .. locationIndex])
-				end
-			else
-				function createEntity()
-					Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, 0, 0, 0)
-					SetEntityHeading(Vendors[shopID .. locationIndex], locationCoords.w)
-					FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
-				end
-
-				function deleteEntity()
-					RemoveEntity(Vendors[shopID .. locationIndex])
-				end
-			end
-
-			local point = lib.points.new(locationCoords, 25)
-			function point:onEnter()
-				if not Vendors[shopID .. locationIndex] or (Vendors[shopID .. locationIndex] and not DoesEntityExist(Vendors[shopID .. locationIndex])) then
-					while not HasModelLoaded(model) do
-							pcall(function()
-						lib.requestModel(model)
-							end)
+				local createEntity
+				local deleteEntity
+				if IsModelAPed(model) then
+					function createEntity()
+						Vendors[shopID .. locationIndex] = CreatePed(0, model, locationCoords.x, locationCoords.y, locationCoords.z - 1.0, locationCoords.a, false, false)
+						SetEntityInvincible(Vendors[shopID .. locationIndex], true)
+						TaskStartScenarioInPlace(Vendors[shopID .. locationIndex], storeData.scenario or scenarios[math.random(1, #scenarios)], -1, true)
+						SetBlockingOfNonTemporaryEvents(Vendors[shopID .. locationIndex], true)
+						SetEntityNoCollisionEntity(Vendors[shopID .. locationIndex], cache.ped, false)
+						FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
 					end
-					createEntity()
+
+					function deleteEntity()
+						DeletePed(Vendors[shopID .. locationIndex])
+					end
+				else
+					function createEntity()
+						Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, 0, 0, 0)
+						SetEntityHeading(Vendors[shopID .. locationIndex], locationCoords.w)
+						FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
+					end
+
+					function deleteEntity()
+						RemoveEntity(Vendors[shopID .. locationIndex])
+					end
 				end
 
-				exports.ox_target:addLocalEntity(Vendors[shopID .. locationIndex], targetOptions)
-			end
+				local point = lib.points.new(locationCoords, 25)
+				function point:onEnter()
+					if not Vendors[shopID .. locationIndex] or (Vendors[shopID .. locationIndex] and not DoesEntityExist(Vendors[shopID .. locationIndex])) then
+						while not HasModelLoaded(model) do
+							pcall(function()
+								lib.requestModel(model)
+							end)
+						end
+						createEntity()
+					end
 
-			function point:onExit()
-				deleteEntity()
-			end
+					exports.ox_target:addLocalEntity(Vendors[shopID .. locationIndex], targetOptions)
+				end
 
-			Points[#Points + 1] = point
+				function point:onExit()
+					deleteEntity()
+				end
+
+				Points[#Points + 1] = point
 			else -- Create normal target point
 				local target = exports.ox_target:addSphereZone({
 					coords = locationCoords,
