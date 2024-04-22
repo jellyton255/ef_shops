@@ -61,28 +61,30 @@ function ShopInterface() {
 			<Group h="auto" w="100%" justify="space-between">
 				<ShopTitle />
 				<Group>
-				<PlayerData />
-				<CloseButton
+					<PlayerData />
+					<CloseButton
 						size="xl"
-					onClick={() => {
-						if (!isEnvBrowser()) fetchNui("hideFrame");
-					}}
-				/>
+						onClick={() => {
+							if (!isEnvBrowser()) fetchNui("hideFrame");
+						}}
+					/>
+				</Group>
 			</Group>
 			<Grid
-				w="99%"
-				h="95%"
+				w="100%"
+				h={0}
+				my="auto"
 				mx="auto"
-				columns={13}
+				columns={18}
+				style={{ flexGrow: 1 }}
 				styles={{
 					inner: { height: "100%" },
 				}}>
-				<Grid.Col h="100%" span={10}>
+				<Grid.Col span={13} h="100%">
 					<ShopGrid />
 				</Grid.Col>
-				<Grid.Col h="100%" span={3}>
-					<Stack h="100%" gap={2} justify="space-between">
-						<Cart />
+				<Grid.Col span={5} h="100%">
+					<Cart />
 				</Grid.Col>
 			</Grid>
 		</Stack>

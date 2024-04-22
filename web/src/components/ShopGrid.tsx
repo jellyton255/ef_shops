@@ -7,7 +7,7 @@ function ShopTab(props: { tab: string }) {
 	const { tab } = props;
 	const { categorizedItems } = useStoreShop();
 
-	const jobCards = useMemo(() => categorizedItems[tab]?.map((item) => <ItemCard item={item} />), [categorizedItems, tab]);
+	const jobCards = useMemo(() => categorizedItems[tab]?.map((item) => <ItemCard key={item.name} item={item} />), [categorizedItems, tab]);
 
 	return (
 		<ScrollArea h="100%" scrollbarSize={4}>
@@ -17,6 +17,7 @@ function ShopTab(props: { tab: string }) {
 				mx="auto"
 				justify="flex-start"
 				columns={21}
+				style={{ overflowX: "clip" }}
 				styles={{
 					inner: { height: "100%" },
 				}}>
@@ -49,7 +50,7 @@ function ShopGrid() {
 		);
 
 	const tabs = Object.keys(categorizedItems).map((category) => (
-		<Tabs.Tab value={category}>
+		<Tabs.Tab value={category} key={category}>
 			<Text fw={700} fz={15} lh={1}>
 				{category}
 			</Text>
@@ -59,7 +60,7 @@ function ShopGrid() {
 	return (
 		<Tabs value={activeTab} onChange={setActiveTab} h="100%" w="100%">
 			<Tabs.List>{tabs}</Tabs.List>
-			<Tabs.Panel value={activeTab} p="sm" h="97%" w="100%">
+			<Tabs.Panel value={activeTab} py="md" h="100%" w="100%">
 				<ShopTab tab={activeTab} />
 			</Tabs.Panel>
 		</Tabs>
