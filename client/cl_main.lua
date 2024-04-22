@@ -28,9 +28,19 @@ local function setShopVisible(shouldShow)
 	SendReactMessage("setVisible", shouldShow)
 end
 
----@param data { type: string, location: integer }
+---@param data { type: string, location?: number }
 local function openShop(data)
+	if not data.location then data.location = 1 end
+
 	lib.print.debug("Opening shop: " .. data.type, "Location: " .. data.location)
+
+	local shopData = LOCATIONS[data.type]
+
+	if not shopData then
+		lib.print.error("Attempted to open a shop that does not exist: " .. data.type)
+		return
+	end
+
 	if shopData.jobs then
 		if (shopData.jobs[QBX.PlayerData.job.name] and shopData.jobs[QBX.PlayerData.job.name] <= QBX.PlayerData.job.grade.level) then
 			goto continue
@@ -40,16 +50,17 @@ local function openShop(data)
 		end
 	end
 
+	:: continue ::
+
 	setShopVisible(true)
 
 	local shopItems = lib.callback.await("EF-Shops:Server:OpenShop", false, data.type, data.location)
 
 	if not shopItems then
 		lib.print.error("Failed opening shop: " .. data.type)
+		setShopVisible(false)
 		return
 	end
-
-	local shopData = LOCATIONS[data.type]
 
 	for _, item in pairs(shopItems) do
 		local productData = PRODUCTS[shopData.shopItems][item.name]
@@ -57,7 +68,6 @@ local function openShop(data)
 		item.label = ITEMS[item.name]?.label
 		item.weight = ITEMS[item.name]?.weight
 		item.category = productData.category
-		item.type = productData.type
 		item.imagePath = GetItemIcon(item.name)
 		item.jobs = productData.jobs
 	end
@@ -79,11 +89,15 @@ local function openShop(data)
 	SendReactMessage("setShopItems", shopItems)
 end
 
+exports("OpenShop", function(type)
+	openShop({ type = type })
+end)
+
 RegisterNuiCallback("purchaseItems", function(data, cb)
 	local success = lib.callback.await("EF-Shops:Server:PurchaseItems", false, data)
 
 	if not success then
-		lib.notify({ title = "Purchase Failed", message = "An error occurred while trying to purchase items.", type = "error" })
+		lib.notify({ title = "Purchase Failed", description = "An error occurred while trying to purchase items.", type = "error" })
 	end
 
 	SendReactMessage("setSelfData", {
@@ -114,6 +128,7 @@ end)
 
 CreateThread(function()
 	for shopID, storeData in pairs(LOCATIONS) do
+		if not storeData.coords then goto continue end
 
 		for locationIndex, locationCoords in pairs(storeData.coords) do
 			if not storeData.blip.disabled then

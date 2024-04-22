@@ -25,16 +25,27 @@ ShopData = {}
 ---@param shopData table
 local function registerShop(shopType, shopData)
 	ShopData[shopType] = {}
-	for locationId, locationData in pairs(shopData.coords) do
+
+	if shopData.coords then
+		for locationId, locationData in pairs(shopData.coords) do
+			local shop = {
+				name = shopData.name,
+				location = locationId,
+				inventory = lib.table.deepclone(shopData.inventory),
+				groups = shopData.groups,
+				coords = locationData
+			}
+
+			ShopData[shopType][locationId] = shop
+		end
+	else
 		local shop = {
 			name = shopData.name,
-			location = locationId,
 			inventory = lib.table.deepclone(shopData.inventory),
-			groups = shopData.groups,
-			coords = locationData
+			groups = shopData.groups
 		}
 
-		ShopData[shopType][locationId] = shop
+		ShopData[shopType][1] = shop
 	end
 end
 
