@@ -50,7 +50,7 @@ function ItemCard(props: { item: ShopItem }) {
 						boxShadow: hovered && (disabled ? "none" : "0 0 10px rgba(0, 0, 0, 0.2)"), // Add a shadow when hovered
 					}}>
 					<Stack w="100%" h="100%" justify="space-between" gap={0}>
-						<Group w="100%" mx="auto" justify="space-between">
+						<Group w="100%" mx="auto" justify="space-between" wrap="nowrap">
 							<Text fw={700} fz={19}>
 								${item.price}
 							</Text>
@@ -63,7 +63,7 @@ function ItemCard(props: { item: ShopItem }) {
 						<Group h="100%">
 							<Image src={item.imagePath} alt={item.label} fallbackSrc="./Box.png" w="75%" h="100%" mx="auto" mt={-5} my="auto" fit="contain" />
 						</Group>
-						<Text fz={20} fw={600} ta="center" mt={-5}>
+						<Text fz={18} fw={600} ta="center">
 							{item.label}
 						</Text>
 					</Stack>
