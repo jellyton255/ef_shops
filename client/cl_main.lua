@@ -187,7 +187,7 @@ CreateThread(function()
 					end
 
 					function deleteEntity()
-						RemoveEntity(Vendors[shopID .. locationIndex])
+						DeleteEntity(Vendors[shopID .. locationIndex])
 					end
 				end
 
