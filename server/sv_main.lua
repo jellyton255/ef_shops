@@ -111,6 +111,16 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 				TriggerClientEvent('ox_lib:notify', source, { title = "The requested amount of " .. itemData.label .. " is no longer in stock.", type = "error" })
 				goto continue
 			end
+			if shopItem.jobs then
+				if not shopItem.jobs[player.PlayerData.job.name] then
+					TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the required job to purchase " .. itemData.label .. ".", type = "error" })
+					goto continue
+				end	
+				if shopItem.jobs[player.PlayerData.job.name] > player.PlayerData.job.grade.level then
+					TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the required grade to purchase " .. itemData.label .. ".", type = "error" })
+					goto continue
+				end
+			end
 
 			local newIndex = #validCartItems + 1
 			validCartItems[newIndex] = mappedCartItem
@@ -156,18 +166,6 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 		if not productData then
 			lib.print.error("Invalid product: " .. item.name .. " in shop: " .. shopType)
 			goto continue
-		end
-
-		if productData.jobs then
-			if not productData.jobs[player.PlayerData.job.name] then
-				lib.print.error("Invalid job: " .. player.PlayerData.job.name .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
-				goto continue
-			end
-
-			if productData.jobs[player.PlayerData.job.name] > player.PlayerData.job.grade.level then
-				lib.print.error("Invalid job grade: " .. player.PlayerData.job.grade.level .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
-				goto continue
-			end
 		end
 
 		local hookResponse = TriggerEventHooks('buyItem', {
