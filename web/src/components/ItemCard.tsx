@@ -12,7 +12,7 @@ export default function ItemCard(props: { item: ShopItem }) {
 	const canNotAfford = cartValue + item.price > Money.Cash && cartValue + item.price > Money.Bank;
 	const overWeight = Weight + cartWeight + item.weight > MaxWeight;
 	const currentItemQuantityInCart = CartItems.reduce((total, cartItem) => {
-		return cartItem.name === item.name ? total + cartItem.quantity : total;
+		return cartItem.id === item.id ? total + cartItem.quantity : total;
 	}, 0);
 	const inStock = !item.count || item.count > currentItemQuantityInCart;
 	const hasLicense = (!item.license && true) || (Licenses && Licenses[item.license]) == true;

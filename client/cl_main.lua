@@ -64,12 +64,12 @@ local function openShop(data)
 	end
 
 	for _, item in pairs(shopItems) do
-		local productData = PRODUCTS[shopData.shopItems][item.name]
+		local productData = PRODUCTS[shopData.shopItems][item.id]
 
-		item.label = ITEMS[item.name]?.label
-		item.weight = ITEMS[item.name]?.weight
+		item.label = productData.metadata?.label or ITEMS[item.name]?.label
+		item.weight = productData.metadata?.weight or ITEMS[item.name]?.weight
 		item.category = productData.category
-		item.imagePath = GetItemIcon(item.name)
+		item.imagePath = productData.metadata?.imageurl or GetItemIcon(item.name)
 		item.jobs = productData.jobs
 	end
 
