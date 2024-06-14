@@ -52,12 +52,14 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 		const { CartItems, cartWeight, cartValue } = get();
 		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.id === item.id);
 
-		let newCartWeight = cartWeight + item.weight; // Update cart weight
-		let newCartValue = cartValue + item.price; // Update cart value
+		let newCartWeight = cartWeight + item.weight * (amount || 1); // Update cart weight
+		let newCartValue = cartValue + item.price * (amount || 1); // Update cart value
 
 		if (existingItemIndex >= 0) {
 			// Item already exists in cart, increase quantity and update weight and value
-			const updatedCartItems = CartItems.map((cartItem, index) => (index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem));
+			const updatedCartItems = CartItems.map((cartItem, index) => 
+				index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem
+			);
 			set(() => ({
 				CartItems: updatedCartItems,
 				cartWeight: newCartWeight,
@@ -85,8 +87,10 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 			let itemValueReduction = shopItem.price * (removeAll ? existingItem.quantity : amount || 1);
 
 			if (existingItem.quantity > 1 && !removeAll) {
-				// Decrease quantity by 1, update weight and value
-				const updatedCartItems = CartItems.map((cartItem, index) => (index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem));
+				// Decrease quantity, update weight and value
+				const updatedCartItems = CartItems.map((cartItem, index) => 
+					index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem
+				);
 				set(() => ({
 					CartItems: updatedCartItems,
 					cartWeight: cartWeight - itemWeightReduction,
