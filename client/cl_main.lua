@@ -133,7 +133,7 @@ CreateThread(function()
 
 		for locationIndex, locationCoords in pairs(storeData.coords) do
 			if not storeData.blip.disabled then
-				local StoreBlip = AddBlipForCoord(locationCoords)
+				local StoreBlip = AddBlipForCoord(locationCoords.x, locationCoords.y, locationCoords.z)
 				SetBlipSprite(StoreBlip, storeData.blip.sprite)
 				SetBlipScale(StoreBlip, storeData.blip.scale or 0.7)
 				SetBlipDisplay(StoreBlip, 6)
@@ -181,7 +181,7 @@ CreateThread(function()
 					end
 				else
 					function createEntity()
-						Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, 0, 0, 0)
+						Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, false, false, false)
 						SetEntityHeading(Vendors[shopID .. locationIndex], locationCoords.w)
 						FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
 					end
