@@ -225,6 +225,44 @@ CreateThread(function()
 	end
 end)
 
+-- Event handlers
+
+RegisterNetEvent('QBCore:Client:OnMoneyChange', function()
+	if not ShopOpen then return end
+	SendReactMessage("setSelfData", {
+		money = {
+			Cash = QBX.PlayerData.money.cash,
+			Bank = QBX.PlayerData.money.bank
+		},
+	})
+end)
+
+RegisterNetEvent('qbx_core:client:onSetMetaData', function(metadata)
+	if not metadata == 'licenses' or not ShopOpen then return end
+	SendReactMessage("setSelfData", {
+		licenses = QBX.PlayerData.metadata.licences
+	})
+end)
+
+RegisterNetEvent('qbx_core:client:onGroupUpdate', function()
+	if not ShopOpen then return end
+	Wait(5) -- Waiting for QBX to update job data
+	SendReactMessage("setSelfData", {
+		job = {
+			name = QBX.PlayerData.job.name,
+			grade = QBX.PlayerData.job.grade.level
+		}
+	})
+end)
+
+AddEventHandler('ox_inventory:updateInventory', function()
+	if not ShopOpen then return end
+	SendReactMessage("setSelfData", {
+		weight = exports.ox_inventory:GetPlayerWeight(),
+		maxWeight = exports.ox_inventory:GetPlayerMaxWeight()
+	})
+end)
+
 AddEventHandler('onResourceStop', function(resource)
 	if resource ~= GetCurrentResourceName() then return end
 
