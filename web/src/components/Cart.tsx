@@ -1,7 +1,6 @@
 import { faBasketShopping, faCreditCard, faFaceFrown, faMoneyBill1Wave, faWeightHanging, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Text, Stack, Title, Group, ActionIcon, NumberInput, Paper, Badge, Button, NumberFormatter, Tooltip } from "@mantine/core";
-import { useMemo } from "react";
+import { Text, Stack, Title, Group, ActionIcon, NumberInput, Paper, Badge, Button, NumberFormatter, Tooltip, ScrollArea } from "@mantine/core";
 import { useStoreShop } from "../stores/ShopStore";
 import { formatMoney } from "../utils/misc";
 import { useStoreSelf } from "../stores/PlayerDataStore";
@@ -51,11 +50,12 @@ function PaymentButtons() {
 	}
 
 	return (
-		<Stack gap={0} justify="space-between">
+		<div className="flex w-full flex-col justify-between">
 			{(awaitingPaymentCash || awaitingPaymentCard) && <div className="container" />}
-			<Group w="100%" gap={0} grow>
+			<div className="flex w-full">
 				<Tooltip label={getToolTip(canAffordCash, overWeight) || "Pay with Cash"} color={(canAffordCash && !overWeight && "green") || "red"} withArrow hidden={!CartItems || CartItems.length == 0}>
 					<Button
+						className="grow"
 						color="green"
 						size="lg"
 						variant="light"
@@ -71,12 +71,14 @@ function PaymentButtons() {
 									clearCart();
 								}
 							});
-						}}>
+						}}
+					>
 						<FontAwesomeIcon size="lg" icon={faMoneyBill1Wave} />
 					</Button>
 				</Tooltip>
 				<Tooltip label={getToolTip(canAffordCard, overWeight) || "Pay with Card"} color={(canAffordCard && !overWeight && "blue") || "red"} withArrow hidden={!CartItems || CartItems.length == 0}>
 					<Button
+						className="grow"
 						color="blue"
 						size="lg"
 						variant="light"
@@ -92,28 +94,28 @@ function PaymentButtons() {
 									clearCart();
 								}
 							});
-						}}>
+						}}
+					>
 						<FontAwesomeIcon size="lg" icon={faCreditCard} />
 					</Button>
 				</Tooltip>
-			</Group>
-			<Badge w="100%" mt={6} size="lg" leftSection={<FontAwesomeIcon icon={faWeightHanging} />} color="indigo" radius="sm" variant="light">
-				<Text fw={700} ta="right" mx={6}>
-					<NumberFormatter value={formatWeight(Weight)} suffix="kg" thousandSeparator />
-					{cartWeight > 0 && (
-						<Text component="span">
-							<NumberFormatter value={formatWeight(cartWeight)} prefix=" + " suffix="kg" thousandSeparator />
-						</Text>
-					)}
-					{" / "}
-					<NumberFormatter value={formatWeight(MaxWeight)} suffix="kg" thousandSeparator />
-				</Text>
-			</Badge>
-		</Stack>
+			</div>
+			<p className="mt-1 flex items-center justify-center gap-1 rounded-sm bg-indigo-800/25 px-2 py-1 text-lg font-medium text-indigo-400">
+				<FontAwesomeIcon size="xs" icon={faWeightHanging} />
+				<NumberFormatter value={formatWeight(Weight)} suffix="kg" thousandSeparator />
+				{cartWeight > 0 && (
+					<span className="font-bold">
+						<NumberFormatter value={formatWeight(cartWeight)} prefix=" + " suffix="kg" thousandSeparator />
+					</span>
+				)}
+				{" / "}
+				<NumberFormatter value={formatWeight(MaxWeight)} suffix="kg" thousandSeparator />
+			</p>
+		</div>
 	);
 }
 
-function Cart() {
+export default function Cart() {
 	const { CartItems, addItemToCart, removeItemFromCart, getShopItemData, cartWeight } = useStoreShop();
 	const { Money, Weight, MaxWeight } = useStoreSelf();
 
@@ -123,7 +125,7 @@ function Cart() {
 		var title = <Title order={5}>{storeItem.label}</Title>;
 
 		return (
-			<Paper key={item.name} p="sm">
+			<div className="mx-1 p-2" key={item.name}>
 				<Group w="100%" justify="space-between" wrap="nowrap">
 					{title}
 					<Group justify="flex-end" ml="auto">
@@ -183,49 +185,45 @@ function Cart() {
 								variant="light"
 								onClick={() => {
 									removeItemFromCart(item.name, null, true);
-								}}>
+								}}
+							>
 								<FontAwesomeIcon icon={faXmark} />
 							</ActionIcon>
 						</Group>
 					</Group>
 				</Group>
-			</Paper>
+			</div>
 		);
 	});
 
-	return useMemo(
-		() => (
-			<Stack h="100%" gap={12} justify="space-between">
-				<Group justify="space-between">
-					<Group gap={10} mx={4}>
-						<FontAwesomeIcon size="lg" icon={faBasketShopping} />
-						<Title order={3}>Cart</Title>
-					</Group>
-
-					<Text fz={18} fw={500} mx={4}>
-						<Text fw={700} fz={19} component="span">
-							Total:{" "}
-						</Text>
-						${formatMoney(CartItems?.reduce((acc, item) => acc + getShopItemData(item.name).price * item.quantity, 0) || 0)}
-					</Text>
+	return (
+		<div className="col-span-3 flex size-full flex-col justify-between gap-1">
+			<div className="flex justify-between gap-1">
+				<Group gap={10} mx={4}>
+					<FontAwesomeIcon size="lg" icon={faBasketShopping} />
+					<Title order={3}>Cart</Title>
 				</Group>
 
-				<Stack gap={6} style={{ overflow: "auto" }} mb={CartItems?.length > 0 && "auto"}>
-					{CartItems?.length <= 0 && (
-						<Stack my="auto" gap={2} align="center">
-							<FontAwesomeIcon icon={faFaceFrown} size="2x" />
-							<Title order={3}>No Items in Cart</Title>
-						</Stack>
-					)}
-					{currentCartItems}
-				</Stack>
-
-				<PaymentButtons />
-			</Stack>
-		),
-
-		[CartItems]
+				<Text fz={18} fw={500} mx={4}>
+					<Text fw={700} fz={19} component="span">
+						{"Total: "}
+					</Text>
+					${formatMoney(CartItems?.reduce((acc, item) => acc + getShopItemData(item.name).price * item.quantity, 0) || 0)}
+				</Text>
+			</div>
+			<div className={`flex h-0 grow flex-col gap-3 ${CartItems?.length > 0 && "overflow-y-auto"}`}>
+				{CartItems?.length <= 0 ? (
+					<div className="my-auto flex flex-col items-center gap-1">
+						<FontAwesomeIcon icon={faFaceFrown} size="2x" />
+						<h1 className="text-2xl font-bold">No Items in Cart</h1>
+					</div>
+				) : (
+					<ScrollArea h="100%" scrollbarSize={4}>
+						{currentCartItems}
+					</ScrollArea>
+				)}
+			</div>
+			<PaymentButtons />
+		</div>
 	);
 }
-
-export default Cart;

@@ -8,6 +8,7 @@ import { fetchNui } from "./utils/fetchNui";
 import "./index.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "non.geist";
 
 if (!isEnvBrowser()) fetchNui("Loaded");
 if (isEnvBrowser()) {

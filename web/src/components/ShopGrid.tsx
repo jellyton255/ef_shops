@@ -14,20 +14,20 @@ function ShopTab(props: { tab: string }) {
 			<Grid
 				w="97%"
 				h="100%"
+				p={6}
 				mx="auto"
-				justify="flex-start"
-				columns={21}
-				style={{ overflowX: "clip" }}
+				columns={7}
 				styles={{
 					inner: { height: "100%" },
-				}}>
+				}}
+			>
 				{jobCards}
 			</Grid>
 		</ScrollArea>
 	);
 }
 
-function ShopGrid() {
+export default function ShopGrid() {
 	const { ShopItems, categorizedItems } = useStoreShop();
 	const [activeTab, setActiveTab] = useState<string>(Object.keys(categorizedItems)[0] || "Misc");
 
@@ -66,5 +66,3 @@ function ShopGrid() {
 		</Tabs>
 	);
 }
-
-export default ShopGrid;

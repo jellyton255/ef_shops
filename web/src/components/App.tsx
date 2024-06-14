@@ -1,29 +1,19 @@
 import { debugData } from "../utils/debugData";
-import { Flex, alpha, useMantineTheme, Paper } from "@mantine/core";
 import { VisibilityProvider } from "../providers/VisibilityProvider";
 import DataHandler from "../DataHandler";
 import ShopInterface from "./ShopInterface";
 import { ShopItem } from "../types/ShopItem";
 
-function App() {
-	const theme = useMantineTheme();
-
+export default function App() {
 	DataHandler();
 
 	return (
 		<VisibilityProvider>
-			<Flex w="100vw" h="100vh" align="center" justify="center">
-				<Paper
-					w="75vw"
-					h="82vh"
-					p="md"
-					bg={alpha(theme.colors.dark[7], 0.97)}
-					style={{
-						transition: "all 0.2s ease",
-					}}>
+			<div className="dark flex h-screen w-screen items-center justify-center">
+				<div className="h-[82vh] w-3/4 bg-neutral-900/[0.97] p-4 transition-all">
 					<ShopInterface />
-				</Paper>
-			</Flex>
+				</div>
+			</div>
 		</VisibilityProvider>
 	);
 }
@@ -40,7 +30,7 @@ debugData([
 		action: "setCurrentShop",
 		data: {
 			shop: "247supermarket",
-			label: "Shop",
+			label: "24/7 Supermarket",
 			location: 1,
 		},
 	},
@@ -68,7 +58,7 @@ debugData([
 		action: "setShopItems",
 		data: [
 			{
-				name: "egochaser",
+				name: "redwood",
 				category: "Redwood Wights Pack Long",
 				label: "Redwood Wights Pack Long",
 				price: 2,
@@ -85,30 +75,6 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
 			},
 			{
-				name: "egochaser",
-				category: "Food",
-				label: "Ego Chaser",
-				price: 2,
-				weight: 100,
-				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
-				license: "weapon",
-			},
-			{
-				name: "egochaser",
-				category: "Food",
-				label: "Ego Chaser",
-				price: 2,
-				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
-				license: "hunting",
-			},
-			{
-				name: "egochaser",
-				category: "Food",
-				label: "Ego Chaser",
-				price: 2,
-				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
-			},
-			{
 				name: "steak",
 				category: "Food",
 				label: "Steak",
@@ -116,7 +82,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/steak.png",
 			},
 			{
-				name: "sparkling water",
+				name: "sparklng water",
 				category: "Drink",
 				label: "Crystal Clear Sparkling Water",
 				price: 1,
@@ -125,7 +91,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/sparkling_water.png",
 			},
 			{
-				name: "sports watch",
+				name: "spots watch",
 				category: "Accessory",
 				label: "Sports Watch",
 				price: 25,
@@ -135,7 +101,7 @@ debugData([
 				license: "accessory",
 			},
 			{
-				name: "gaming mouse",
+				name: "gamng mouse",
 				category: "Electronics",
 				label: "Gaming Mouse",
 				price: 35,
@@ -144,7 +110,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gaming_mouse.png",
 			},
 			{
-				name: "chocolate bar",
+				name: "chocolte bar",
 				category: "Food",
 				label: "Deluxe Chocolate Bar",
 				price: 3,
@@ -153,7 +119,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/chocolate_bar.png",
 			},
 			{
-				name: "baseball cap",
+				name: "basebal cap",
 				category: "Clothing",
 				label: "Baseball Cap",
 				price: 15,
@@ -162,7 +128,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/baseball_cap.png",
 			},
 			{
-				name: "artisan coffee",
+				name: "artisan cof2ee",
 				category: "Drink",
 				label: "Artisan Coffee Beans",
 				price: 15,
@@ -171,7 +137,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/artisan_coffee.png",
 			},
 			{
-				name: "vintage sunglasses",
+				name: "vintage sunglsses",
 				category: "Accessory",
 				label: "Vintage Sunglasses",
 				price: 50,
@@ -180,7 +146,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/vintage_sunglasses.png",
 			},
 			{
-				name: "wireless headphones",
+				name: "wireless headphnes",
 				category: "Electronics",
 				label: "Wireless Headphones",
 				price: 120,
@@ -189,7 +155,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/wireless_headphones.png",
 			},
 			{
-				name: "organic granola bars",
+				name: "organic granola bar1",
 				category: "Food",
 				label: "Organic Granola Bars",
 				price: 5,
@@ -198,7 +164,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/organic_granola_bars.png",
 			},
 			{
-				name: "running shoes",
+				name: "runnng shoes",
 				category: "Clothing",
 				label: "Running Shoes",
 				price: 80,
@@ -207,7 +173,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/running_shoes.png",
 			},
 			{
-				name: "e-reader",
+				name: "e-reade",
 				category: "Electronics",
 				label: "E-Reader",
 				price: 130,
@@ -216,14 +182,14 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/e_reader.png",
 			},
 			{
-				name: "steak",
+				name: "stek",
 				category: "Food",
 				label: "Steak",
 				price: 2,
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/steak.png",
 			},
 			{
-				name: "sparkling water",
+				name: "sprkling water",
 				category: "Drink",
 				label: "Crystal Clear Sparkling Water",
 				price: 1,
@@ -232,7 +198,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/sparkling_water.png",
 			},
 			{
-				name: "sports watch",
+				name: "sprts watch",
 				category: "Accessory",
 				label: "Sports Watch",
 				price: 25,
@@ -242,7 +208,7 @@ debugData([
 				license: "accessory",
 			},
 			{
-				name: "gaming mouse",
+				name: "ga2mng mouse",
 				category: "Electronics",
 				label: "Gaming Mouse",
 				price: 35,
@@ -251,7 +217,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gaming_mouse.png",
 			},
 			{
-				name: "chocolate bar",
+				name: "chocoate bar",
 				category: "Food",
 				label: "Deluxe Chocolate Bar",
 				price: 3,
@@ -260,7 +226,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/chocolate_bar.png",
 			},
 			{
-				name: "baseball cap",
+				name: "baseall cap",
 				category: "Clothing",
 				label: "Baseball Cap",
 				price: 15,
@@ -269,7 +235,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/baseball_cap.png",
 			},
 			{
-				name: "artisan coffee",
+				name: "artisan cofee",
 				category: "Drink",
 				label: "Artisan Coffee Beans",
 				price: 15,
@@ -278,7 +244,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/artisan_coffee.png",
 			},
 			{
-				name: "vintage sunglasses",
+				name: "vintage sunlsses",
 				category: "Accessory",
 				label: "Vintage Sunglasses",
 				price: 50,
@@ -296,7 +262,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/wireless_headphones.png",
 			},
 			{
-				name: "organic granola bars",
+				name: "organic granola bars1",
 				category: "Food",
 				label: "Organic Granola Bars",
 				price: 5,
@@ -376,8 +342,167 @@ debugData([
 				count: 10,
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/backpack.png",
 			},
+			{
+				name: "redwoo",
+				category: "Food",
+				label: "Redwood",
+				price: 2,
+				count: 100,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/redwood.png",
+			},
+			{
+				name: "running sh3oes",
+				category: "Clothing",
+				label: "Running Shoes",
+				price: 80,
+				weight: 1000,
+				count: 10,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/running_shoes.png",
+			},
+			{
+				name: "e-read2er",
+				category: "Electronics",
+				label: "E-Reader",
+				price: 130,
+				weight: 300,
+				count: 7,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/e_reader.png",
+			},
+			{
+				name: "gourm1et cheese",
+				category: "Food",
+				label: "Gourmet Cheese",
+				price: 20,
+				weight: 200,
+				count: 15,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/gourmet_cheese.png",
+			},
+			{
+				name: "sm3artwatch",
+				category: "Electronics",
+				label: "Smartwatch",
+				price: 199,
+				weight: 150,
+				count: 6,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/smartwatch.png",
+			},
+			{
+				name: "profe1ssional camera",
+				category: "Electronics",
+				label: "Professional Camera",
+				price: 850,
+				weight: 1200,
+				count: 3,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/professional_camera.png",
+			},
+			{
+				name: "yoga 3mat",
+				category: "Accessory",
+				label: "Yoga Mat",
+				price: 25,
+				weight: 900,
+				count: 12,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/yoga_mat.png",
+			},
+			{
+				name: "bluetoot1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "backp3ack",
+				category: "Accessory",
+				label: "Backpack",
+				price: 70,
+				weight: 500,
+				count: 10,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/backpack.png",
+			},
+			{
+				name: "blue1toot1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "bluetoo2t1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "bluetoot15h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "bluetoot1h spe6aker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "bluetoot1h spe41aker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "blueto21ot1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "blueto12ot1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "bluetoo32t1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
+			{
+				name: "blu1etoot1h speaker",
+				category: "Electronics",
+				label: "Bluetooth Speaker",
+				price: 60,
+				weight: 400,
+				count: 8,
+				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
+			},
 		] as ShopItem[],
 	},
 ]);
-
-export default App;
