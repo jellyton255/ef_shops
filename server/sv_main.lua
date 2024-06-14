@@ -3,7 +3,6 @@ if not lib.checkDependency('qbx_core', '1.6.0') then error() end
 if not lib.checkDependency('ox_lib', '3.0.0') then error() end
 if not lib.checkDependency('ox_inventory', '2.20.0') then error() end
 
-
 local config = require 'config.config'
 local TriggerEventHooks = require '@qbx_core.modules.hooks'
 
@@ -167,6 +166,19 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 				lib.print.error("Invalid job grade: " .. player.PlayerData.job.grade.level .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
 				goto continue
 			end
+		end
+
+		local hookResponse = TriggerEventHooks('buyItem', {
+			source = source,
+			shopId = purchaseData.shop.id,
+			shopLocation = purchaseData.shop.location,
+			item = itemData,
+			product = productData,
+			currency = currency,
+		})
+
+		if hookResponse == false then
+			goto continue
 		end
 
 		local success, response = ox_inventory:AddItem(source, item.name, item.quantity, productData.metadata)
