@@ -125,6 +125,45 @@ export default function Cart() {
 		var price = storeItem.price;
 		var title = <Title order={5}>{storeItem.label}</Title>;
 
+		const handleQuantityChange = (value: number) => {
+			if (value === item.quantity) return;
+
+			const newCartValue = CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) + price * (value - item.quantity);
+			const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (value - item.quantity);
+
+			const canAffordCash = newCartValue <= Money.Cash;
+			const canAffordCard = newCartValue <= Money.Bank;
+			const overWeight = newCartWeight > MaxWeight;
+
+			if (overWeight) {
+				notifications.show({
+					title: "Too Heavy",
+					message: `You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`,
+					icon: <FontAwesomeIcon icon={faWeightHanging} />,
+					color: "red",
+					classNames: classes,
+				});
+				return;
+			}
+
+			if (!canAffordCash && !canAffordCard) {
+				notifications.show({
+					title: "Cannot Afford",
+					message: `You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`,
+					icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
+					color: "red",
+					classNames: classes,
+				});
+				return;
+			}
+
+			if (value > item.quantity) {
+				addItemToCart(getShopItemData(item.id), value - item.quantity);
+			} else {
+				removeItemFromCart(item.id, item.quantity - value);
+			}
+		};
+
 		return (
 			<div className="mx-1 p-2" key={item.id}>
 				<Group w="100%" justify="space-between" wrap="nowrap">
@@ -142,17 +181,15 @@ export default function Cart() {
 								max={storeItem.count}
 								clampBehavior="strict"
 								startValue={1}
-								onChange={(value: number) => {
-									if (value === item.quantity) return;
-
-									if (value > item.quantity) {
-										addItemToCart(getShopItemData(item.name), value - item.quantity);
-									} else removeItemFromCart(item.name, item.quantity - value);
-								}}
+								onChange={handleQuantityChange}
 								isAllowed={(values) => {
-									const canAffordCash = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Cash;
-									const canAffordCard = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Bank;
-									const overWeight = Weight + cartWeight + (storeItem.weight || 0) * values.floatValue > MaxWeight;
+									const newCartValue = CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) + price * (values.floatValue - item.quantity);
+									const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (values.floatValue - item.quantity);
+
+									const canAffordCash = newCartValue <= Money.Cash;
+									const canAffordCard = newCartValue <= Money.Bank;
+									const overWeight = newCartWeight > MaxWeight;
+
 									if (overWeight) {
 										notifications.show({
 											title: "Too Heavy",
