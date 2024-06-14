@@ -4,6 +4,7 @@
 ---@field category? string the category of the item in the shop (e.g. 'Snacks', 'Tools', 'Firearms', 'Ammunition', 'Drinks')
 ---@field license? string the license required to purchase the item
 ---@field jobs? table<string, number> map of group names to min grade required to access the shop
+---@field metadata? table | string
 
 ---@type table<string, table<string, ShopItem>>
 return {
