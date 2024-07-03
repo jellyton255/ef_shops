@@ -65,6 +65,7 @@ end
 lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchaseData)
 	local player = exports.qbx_core:GetPlayer(source)
 	local shop = ShopData[purchaseData.shop.id][purchaseData.shop.location]
+	local shopType = purchaseData.shop.id
 
 	if not shop then
 		lib.print.error("Invalid shop: " .. purchaseData.shop.id .. " called by: " .. GetPlayerName(source))
@@ -86,35 +87,46 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 	end
 
 	local currency = purchaseData.currency
-	local mappedCartItems = mapBySubfield(purchaseData.items, "name")
+	local mappedCartItems = mapBySubfield(purchaseData.items, "id")
 	local validCartItems = {} ---@type OxItem[]
 
 	local totalPrice = 0
 	for i = 1, #shop.inventory do
 		local shopItem = shop.inventory[i]
 		local itemData = ITEMS[shopItem.name]
+		local mappedCartItem = mappedCartItems[shopItem.id]
 
-		if mappedCartItems[shopItem.name] then
+		if mappedCartItem then
 			if shopItem.license and player.PlayerData.metadata.licences[shopItem.license] ~= true then
 				TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the license to purchase this item (" .. shopItem.license .. ").", type = "error" })
 				goto continue
 			end
 
-			if not exports.ox_inventory:CanCarryItem(source, shopItem.name, mappedCartItems[shopItem.name].quantity) then
+			if not exports.ox_inventory:CanCarryItem(source, shopItem.name, mappedCartItem.quantity) then
 				TriggerClientEvent('ox_lib:notify', source, { title = "You cannot carry the requested quantity of " .. itemData.label .. "s.", type = "error" })
 				goto continue
 			end
 
-			if shopItem.count and (mappedCartItems[shopItem.name].quantity > shopItem.count) then
+			if shopItem.count and (mappedCartItem.quantity > shopItem.count) then
 				TriggerClientEvent('ox_lib:notify', source, { title = "The requested amount of " .. itemData.label .. " is no longer in stock.", type = "error" })
 				goto continue
 			end
+			if shopItem.jobs then
+				if not shopItem.jobs[player.PlayerData.job.name] then
+					TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the required job to purchase " .. itemData.label .. ".", type = "error" })
+					goto continue
+				end	
+				if shopItem.jobs[player.PlayerData.job.name] > player.PlayerData.job.grade.level then
+					TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the required grade to purchase " .. itemData.label .. ".", type = "error" })
+					goto continue
+				end
+			end
 
 			local newIndex = #validCartItems + 1
-			validCartItems[newIndex] = mappedCartItems[shopItem.name]
+			validCartItems[newIndex] = mappedCartItem
 			validCartItems[newIndex].inventoryIndex = i
 
-			totalPrice = totalPrice + (shopItem.price * mappedCartItems[shopItem.name].quantity)
+			totalPrice = totalPrice + (shopItem.price * mappedCartItem.quantity)
 		end
 
 		:: continue ::
@@ -144,7 +156,7 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 	for i = 1, #validCartItems do
 		local item = validCartItems[i]
 		local itemData = ITEMS[item.name]
-		local productData = PRODUCTS[shopData.shopItems][item.name]
+		local productData = PRODUCTS[shopData.shopItems][item.id]
 
 		if not itemData then
 			lib.print.error("Invalid item: " .. item.name .. " in shop: " .. shopType)
@@ -154,18 +166,6 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 		if not productData then
 			lib.print.error("Invalid product: " .. item.name .. " in shop: " .. shopType)
 			goto continue
-		end
-
-		if productData.jobs then
-			if not productData.jobs[player.PlayerData.job.name] then
-				lib.print.error("Invalid job: " .. player.PlayerData.job.name .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
-				goto continue
-			end
-
-			if productData.jobs[player.PlayerData.job.name] > player.PlayerData.job.grade.level then
-				lib.print.error("Invalid job grade: " .. player.PlayerData.job.grade.level .. " for product: " .. item.name .. " in shop: " .. shopType, "called by: " .. GetPlayerName(source))
-				goto continue
-			end
 		end
 
 		local hookResponse = TriggerEventHooks('buyItem', {
@@ -218,8 +218,8 @@ AddEventHandler('onResourceStart', function(resource)
 	if GetCurrentResourceName() ~= resource and "ox_inventory" ~= resource then return end
 
 	for productType, productData in pairs(PRODUCTS) do
-		for item, _ in pairs(productData) do
-			if not ITEMS[(string.find(item, "weapon_") and (item):upper()) or item] then
+		for _, item in pairs(productData) do
+			if not ITEMS[(string.find(item.name, "weapon_") and (item.name):upper()) or item.name] then
 				lib.print.error("Invalid Item: ", item, "in product table:", productType, "^7")
 				productData[item] = nil
 			end
@@ -235,11 +235,13 @@ AddEventHandler('onResourceStart', function(resource)
 		local shopProducts = {}
 		for item, data in pairs(PRODUCTS[shopData.shopItems]) do
 			shopProducts[#shopProducts + 1] = {
-				name = item,
+				id = tonumber(item),
+				name = data.name,
 				price = config.fluctuatePrices and (math.round(data.price * (math.random(80, 120) / 100))) or data.price or 0, -- Price fluctuation algorithm from ox_inventory https://github.com/overextended/ox_inventory/blob/e3a6b905a1b8bdbd3066d012522cf5993466d166/modules/shops/server.lua#L32
 				license = data.license,
-				info = data.info,
-				count = data.defaultStock
+				metadata = data.metadata,
+				count = data.defaultStock,
+				jobs = data.jobs
 			}
 		end
 

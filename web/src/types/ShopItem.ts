@@ -5,6 +5,7 @@ export type Shop = {
 };
 
 export type ShopItem = {
+	id: number;
 	name: string;
 	label: string;
 	price: number;
@@ -18,6 +19,7 @@ export type ShopItem = {
 };
 
 export type CartItem = {
+	id: number;
 	name: string;
 	quantity: number;
 };

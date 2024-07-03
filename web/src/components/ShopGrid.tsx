@@ -7,7 +7,7 @@ function ShopTab(props: { tab: string }) {
 	const { tab } = props;
 	const { categorizedItems } = useStoreShop();
 
-	const jobCards = useMemo(() => categorizedItems[tab]?.map((item) => <ItemCard key={item.name} item={item} />), [categorizedItems, tab]);
+	const itemCards = useMemo(() => categorizedItems[tab]?.map((item) => <ItemCard key={item.id} item={item} />), [categorizedItems, tab]);
 
 	return (
 		<ScrollArea h="100%" scrollbarSize={4}>
@@ -21,7 +21,7 @@ function ShopTab(props: { tab: string }) {
 					inner: { height: "100%" },
 				}}
 			>
-				{jobCards}
+				{itemCards}
 			</Grid>
 		</ScrollArea>
 	);

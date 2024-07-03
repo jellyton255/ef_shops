@@ -11,9 +11,9 @@ type ShopItems = {
 	setCurrentShop: (shop: Shop) => void;
 	setShopItems: (items: ShopItem[]) => void;
 	addItemToCart: (item: ShopItem, amount?: number) => void;
-	removeItemFromCart: (itemName: string, amount?: number, removeAll?: boolean) => void;
+	removeItemFromCart: (itemId: number, amount?: number, removeAll?: boolean) => void;
 	clearCart: () => void;
-	getShopItemData: (itemName: string) => ShopItem | undefined;
+	getShopItemData: (itemId: number) => ShopItem | undefined;
 };
 
 export const useStoreShop = create<ShopItems>((set, get) => ({
@@ -50,14 +50,16 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 
 	addItemToCart: (item: ShopItem, amount: number) => {
 		const { CartItems, cartWeight, cartValue } = get();
-		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.name === item.name);
+		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.id === item.id);
 
-		let newCartWeight = cartWeight + item.weight; // Update cart weight
-		let newCartValue = cartValue + item.price; // Update cart value
+		let newCartWeight = cartWeight + item.weight * (amount || 1); // Update cart weight
+		let newCartValue = cartValue + item.price * (amount || 1); // Update cart value
 
 		if (existingItemIndex >= 0) {
 			// Item already exists in cart, increase quantity and update weight and value
-			const updatedCartItems = CartItems.map((cartItem, index) => (index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem));
+			const updatedCartItems = CartItems.map((cartItem, index) => 
+				index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem
+			);
 			set(() => ({
 				CartItems: updatedCartItems,
 				cartWeight: newCartWeight,
@@ -65,7 +67,7 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 			}));
 		} else {
 			// Item not in cart, add new item
-			const newItem = { name: item.name, quantity: amount || 1, weight: item.weight, price: item.price };
+			const newItem = { id: item.id, name: item.name, quantity: amount || 1, weight: item.weight, price: item.price };
 			set(() => ({
 				CartItems: [...CartItems, newItem],
 				cartWeight: newCartWeight,
@@ -74,18 +76,21 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 		}
 	},
 
-	removeItemFromCart: (itemName: string, amount?: number, removeAll: boolean = false) => {
+	removeItemFromCart: (itemId: number, amount?: number, removeAll: boolean = false) => {
 		const { CartItems, cartWeight, cartValue, getShopItemData } = get();
-		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.name === itemName);
+		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.id === itemId);
 
 		if (existingItemIndex >= 0) {
 			const existingItem = CartItems[existingItemIndex];
-			let itemWeightReduction = getShopItemData(existingItem.name).weight * (removeAll ? existingItem.quantity : amount || 1);
-			let itemValueReduction = getShopItemData(existingItem.name).price * (removeAll ? existingItem.quantity : amount || 1);
+			const shopItem = getShopItemData(existingItem.id);
+			let itemWeightReduction = shopItem.weight * (removeAll ? existingItem.quantity : amount || 1);
+			let itemValueReduction = shopItem.price * (removeAll ? existingItem.quantity : amount || 1);
 
 			if (existingItem.quantity > 1 && !removeAll) {
-				// Decrease quantity by 1, update weight and value
-				const updatedCartItems = CartItems.map((cartItem, index) => (index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem));
+				// Decrease quantity, update weight and value
+				const updatedCartItems = CartItems.map((cartItem, index) => 
+					index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem
+				);
 				set(() => ({
 					CartItems: updatedCartItems,
 					cartWeight: cartWeight - itemWeightReduction,
@@ -111,10 +116,10 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 		}));
 	},
 
-	getShopItemData: (itemName: string) => {
+	getShopItemData: (itemId: number) => {
 		const { ShopItems } = get();
 		if (ShopItems) {
-			return ShopItems.find((item) => item.name === itemName);
+			return ShopItems.find((item) => item.id === itemId);
 		}
 		return undefined; // Return undefined if the item is not found or if ShopItems is null
 	},

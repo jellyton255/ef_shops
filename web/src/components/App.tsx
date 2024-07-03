@@ -58,6 +58,7 @@ debugData([
 		action: "setShopItems",
 		data: [
 			{
+				id: 1,
 				name: "redwood",
 				category: "Redwood Wights Pack Long",
 				label: "Redwood Wights Pack Long",
@@ -67,6 +68,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
 			},
 			{
+				id: 2,
 				name: "egochaser",
 				category: "Food",
 				label: "Ego Chaser",
@@ -75,6 +77,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
 			},
 			{
+				id: 3,
 				name: "steak",
 				category: "Food",
 				label: "Steak",
@@ -82,6 +85,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/steak.png",
 			},
 			{
+				id: 4,
 				name: "sparklng water",
 				category: "Drink",
 				label: "Crystal Clear Sparkling Water",
@@ -91,6 +95,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/sparkling_water.png",
 			},
 			{
+				id: 5,
 				name: "spots watch",
 				category: "Accessory",
 				label: "Sports Watch",
@@ -101,6 +106,7 @@ debugData([
 				license: "accessory",
 			},
 			{
+				id: 6,
 				name: "gamng mouse",
 				category: "Electronics",
 				label: "Gaming Mouse",
@@ -110,6 +116,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gaming_mouse.png",
 			},
 			{
+				id: 7,
 				name: "chocolte bar",
 				category: "Food",
 				label: "Deluxe Chocolate Bar",
@@ -119,6 +126,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/chocolate_bar.png",
 			},
 			{
+				id: 8,
 				name: "basebal cap",
 				category: "Clothing",
 				label: "Baseball Cap",
@@ -128,6 +136,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/baseball_cap.png",
 			},
 			{
+				id: 9,
 				name: "artisan cof2ee",
 				category: "Drink",
 				label: "Artisan Coffee Beans",
@@ -137,6 +146,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/artisan_coffee.png",
 			},
 			{
+				id: 10,
 				name: "vintage sunglsses",
 				category: "Accessory",
 				label: "Vintage Sunglasses",
@@ -146,6 +156,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/vintage_sunglasses.png",
 			},
 			{
+				id: 11,
 				name: "wireless headphnes",
 				category: "Electronics",
 				label: "Wireless Headphones",
@@ -155,6 +166,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/wireless_headphones.png",
 			},
 			{
+				id: 12,
 				name: "organic granola bar1",
 				category: "Food",
 				label: "Organic Granola Bars",
@@ -164,6 +176,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/organic_granola_bars.png",
 			},
 			{
+				id: 13,
 				name: "runnng shoes",
 				category: "Clothing",
 				label: "Running Shoes",
@@ -173,6 +186,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/running_shoes.png",
 			},
 			{
+				id: 14,
 				name: "e-reade",
 				category: "Electronics",
 				label: "E-Reader",
@@ -182,6 +196,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/e_reader.png",
 			},
 			{
+				id: 15,
 				name: "stek",
 				category: "Food",
 				label: "Steak",
@@ -189,6 +204,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/steak.png",
 			},
 			{
+				id: 16,
 				name: "sprkling water",
 				category: "Drink",
 				label: "Crystal Clear Sparkling Water",
@@ -198,6 +214,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/sparkling_water.png",
 			},
 			{
+				id: 17,
 				name: "sprts watch",
 				category: "Accessory",
 				label: "Sports Watch",
@@ -208,6 +225,7 @@ debugData([
 				license: "accessory",
 			},
 			{
+				id: 18,
 				name: "ga2mng mouse",
 				category: "Electronics",
 				label: "Gaming Mouse",
@@ -217,6 +235,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gaming_mouse.png",
 			},
 			{
+				id: 19,
 				name: "chocoate bar",
 				category: "Food",
 				label: "Deluxe Chocolate Bar",
@@ -226,6 +245,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/chocolate_bar.png",
 			},
 			{
+				id: 20,
 				name: "baseall cap",
 				category: "Clothing",
 				label: "Baseball Cap",
@@ -235,6 +255,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/baseball_cap.png",
 			},
 			{
+				id: 21,
 				name: "artisan cofee",
 				category: "Drink",
 				label: "Artisan Coffee Beans",
@@ -244,6 +265,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/artisan_coffee.png",
 			},
 			{
+				id: 22,
 				name: "vintage sunlsses",
 				category: "Accessory",
 				label: "Vintage Sunglasses",
@@ -253,6 +275,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/vintage_sunglasses.png",
 			},
 			{
+				id: 23,
 				name: "wireless headphones",
 				category: "Electronics",
 				label: "Wireless Headphones",
@@ -262,6 +285,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/wireless_headphones.png",
 			},
 			{
+				id: 24,
 				name: "organic granola bars1",
 				category: "Food",
 				label: "Organic Granola Bars",
@@ -271,6 +295,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/organic_granola_bars.png",
 			},
 			{
+				id: 25,
 				name: "running shoes",
 				category: "Clothing",
 				label: "Running Shoes",
@@ -280,6 +305,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/running_shoes.png",
 			},
 			{
+				id: 26,
 				name: "e-reader",
 				category: "Electronics",
 				label: "E-Reader",
@@ -289,6 +315,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/e_reader.png",
 			},
 			{
+				id: 27,
 				name: "gourmet cheese",
 				category: "Food",
 				label: "Gourmet Cheese",
@@ -298,6 +325,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gourmet_cheese.png",
 			},
 			{
+				id: 28,
 				name: "smartwatch",
 				category: "Electronics",
 				label: "Smartwatch",
@@ -307,6 +335,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/smartwatch.png",
 			},
 			{
+				id: 29,
 				name: "professional camera",
 				category: "Electronics",
 				label: "Professional Camera",
@@ -316,6 +345,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/professional_camera.png",
 			},
 			{
+				id: 30,
 				name: "yoga mat",
 				category: "Accessory",
 				label: "Yoga Mat",
@@ -325,6 +355,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/yoga_mat.png",
 			},
 			{
+				id: 31,
 				name: "bluetooth speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -334,6 +365,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 32,
 				name: "backpack",
 				category: "Accessory",
 				label: "Backpack",
@@ -343,6 +375,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/backpack.png",
 			},
 			{
+				id: 33,
 				name: "redwoo",
 				category: "Food",
 				label: "Redwood",
@@ -351,6 +384,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/redwood.png",
 			},
 			{
+				id: 34,
 				name: "running sh3oes",
 				category: "Clothing",
 				label: "Running Shoes",
@@ -360,6 +394,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/running_shoes.png",
 			},
 			{
+				id: 35,
 				name: "e-read2er",
 				category: "Electronics",
 				label: "E-Reader",
@@ -369,6 +404,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/e_reader.png",
 			},
 			{
+				id: 36,
 				name: "gourm1et cheese",
 				category: "Food",
 				label: "Gourmet Cheese",
@@ -378,6 +414,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gourmet_cheese.png",
 			},
 			{
+				id: 37,
 				name: "sm3artwatch",
 				category: "Electronics",
 				label: "Smartwatch",
@@ -387,6 +424,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/smartwatch.png",
 			},
 			{
+				id: 38,
 				name: "profe1ssional camera",
 				category: "Electronics",
 				label: "Professional Camera",
@@ -396,6 +434,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/professional_camera.png",
 			},
 			{
+				id: 39,
 				name: "yoga 3mat",
 				category: "Accessory",
 				label: "Yoga Mat",
@@ -405,6 +444,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/yoga_mat.png",
 			},
 			{
+				id: 40,
 				name: "bluetoot1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -414,6 +454,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 41,
 				name: "backp3ack",
 				category: "Accessory",
 				label: "Backpack",
@@ -423,6 +464,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/backpack.png",
 			},
 			{
+				id: 42,
 				name: "blue1toot1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -432,6 +474,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 43,
 				name: "bluetoo2t1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -441,6 +484,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 44,
 				name: "bluetoot15h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -450,6 +494,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 45,
 				name: "bluetoot1h spe6aker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -459,6 +504,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 46,
 				name: "bluetoot1h spe41aker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -468,6 +514,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 47,
 				name: "blueto21ot1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -477,6 +524,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 48,
 				name: "blueto12ot1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -486,6 +534,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 49,
 				name: "bluetoo32t1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",
@@ -495,6 +544,7 @@ debugData([
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/bluetooth_speaker.png",
 			},
 			{
+				id: 50,
 				name: "blu1etoot1h speaker",
 				category: "Electronics",
 				label: "Bluetooth Speaker",

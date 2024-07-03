@@ -64,12 +64,12 @@ local function openShop(data)
 	end
 
 	for _, item in pairs(shopItems) do
-		local productData = PRODUCTS[shopData.shopItems][item.name]
+		local productData = PRODUCTS[shopData.shopItems][item.id]
 
-		item.label = ITEMS[item.name]?.label
-		item.weight = ITEMS[item.name]?.weight
+		item.label = productData.metadata?.label or ITEMS[item.name]?.label
+		item.weight = productData.metadata?.weight or ITEMS[item.name]?.weight
 		item.category = productData.category
-		item.imagePath = GetItemIcon(item.name)
+		item.imagePath = productData.metadata?.imageurl or GetItemIcon(item.name)
 		item.jobs = productData.jobs
 	end
 
@@ -133,7 +133,7 @@ CreateThread(function()
 
 		for locationIndex, locationCoords in pairs(storeData.coords) do
 			if not storeData.blip.disabled then
-				local StoreBlip = AddBlipForCoord(locationCoords)
+				local StoreBlip = AddBlipForCoord(locationCoords.x, locationCoords.y, locationCoords.z)
 				SetBlipSprite(StoreBlip, storeData.blip.sprite)
 				SetBlipScale(StoreBlip, storeData.blip.scale or 0.7)
 				SetBlipDisplay(StoreBlip, 6)
@@ -181,13 +181,13 @@ CreateThread(function()
 					end
 				else
 					function createEntity()
-						Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, 0, 0, 0)
+						Vendors[shopID .. locationIndex] = CreateObject(model, locationCoords.x, locationCoords.y, locationCoords.z - 1.03, false, false, false)
 						SetEntityHeading(Vendors[shopID .. locationIndex], locationCoords.w)
 						FreezeEntityPosition(Vendors[shopID .. locationIndex], true)
 					end
 
 					function deleteEntity()
-						RemoveEntity(Vendors[shopID .. locationIndex])
+						DeleteEntity(Vendors[shopID .. locationIndex])
 					end
 				end
 
@@ -223,6 +223,44 @@ CreateThread(function()
 
 		:: continue ::
 	end
+end)
+
+-- Event handlers
+
+RegisterNetEvent('QBCore:Client:OnMoneyChange', function()
+	if not ShopOpen then return end
+	SendReactMessage("setSelfData", {
+		money = {
+			Cash = QBX.PlayerData.money.cash,
+			Bank = QBX.PlayerData.money.bank
+		},
+	})
+end)
+
+RegisterNetEvent('qbx_core:client:onSetMetaData', function(metadata)
+	if not metadata == 'licenses' or not ShopOpen then return end
+	SendReactMessage("setSelfData", {
+		licenses = QBX.PlayerData.metadata.licences
+	})
+end)
+
+RegisterNetEvent('qbx_core:client:onGroupUpdate', function()
+	if not ShopOpen then return end
+	Wait(5) -- Waiting for QBX to update job data
+	SendReactMessage("setSelfData", {
+		job = {
+			name = QBX.PlayerData.job.name,
+			grade = QBX.PlayerData.job.grade.level
+		}
+	})
+end)
+
+AddEventHandler('ox_inventory:updateInventory', function()
+	if not ShopOpen then return end
+	SendReactMessage("setSelfData", {
+		weight = exports.ox_inventory:GetPlayerWeight(),
+		maxWeight = exports.ox_inventory:GetPlayerMaxWeight()
+	})
 end)
 
 AddEventHandler('onResourceStop', function(resource)

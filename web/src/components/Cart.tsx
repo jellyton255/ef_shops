@@ -28,19 +28,20 @@ function PaymentButtons() {
 	const [awaitingPaymentCash, setAwaitingPaymentCash] = useState(false);
 	const [awaitingPaymentCard, setAwaitingPaymentCard] = useState(false);
 
-	const canAffordCash = CartItems?.reduce((acc, item) => acc + getShopItemData(item.name).price * item.quantity, 0) <= Money.Cash;
-	const canAffordCard = CartItems?.reduce((acc, item) => acc + getShopItemData(item.name).price * item.quantity, 0) <= Money.Bank;
+	const canAffordCash = CartItems?.reduce((acc, item) => acc + getShopItemData(item.id).price * item.quantity, 0) <= Money.Cash;
+	const canAffordCard = CartItems?.reduce((acc, item) => acc + getShopItemData(item.id).price * item.quantity, 0) <= Money.Bank;
 	const overWeight = Weight + cartWeight > MaxWeight;
 
 	function finishPurchase() {
 		// Create a new array with updated quantities
 		const updatedShopItems = ShopItems.map((shopItem) => {
-			const cartItem = CartItems.find((item) => item.name === shopItem.name);
+			const cartItem = CartItems.find((item) => item.id === shopItem.id);
 			if (cartItem) {
-				return { ...shopItem, count: shopItem.count - cartItem.quantity };
-			} else {
-				return shopItem;
+				if (shopItem.count !== undefined) {
+					return { ...shopItem, count: shopItem.count - cartItem.quantity };
+				}
 			}
+			return shopItem;
 		});
 
 		// Update the state
@@ -120,12 +121,51 @@ export default function Cart() {
 	const { Money, Weight, MaxWeight } = useStoreSelf();
 
 	const currentCartItems = CartItems?.map((item) => {
-		const storeItem = getShopItemData(item.name);
+		const storeItem = getShopItemData(item.id);
 		var price = storeItem.price;
 		var title = <Title order={5}>{storeItem.label}</Title>;
 
+		const handleQuantityChange = (value: number) => {
+			if (value === item.quantity) return;
+
+			const newCartValue = CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) + price * (value - item.quantity);
+			const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (value - item.quantity);
+
+			const canAffordCash = newCartValue <= Money.Cash;
+			const canAffordCard = newCartValue <= Money.Bank;
+			const overWeight = newCartWeight > MaxWeight;
+
+			if (overWeight) {
+				notifications.show({
+					title: "Too Heavy",
+					message: `You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`,
+					icon: <FontAwesomeIcon icon={faWeightHanging} />,
+					color: "red",
+					classNames: classes,
+				});
+				return;
+			}
+
+			if (!canAffordCash && !canAffordCard) {
+				notifications.show({
+					title: "Cannot Afford",
+					message: `You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`,
+					icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
+					color: "red",
+					classNames: classes,
+				});
+				return;
+			}
+
+			if (value > item.quantity) {
+				addItemToCart(getShopItemData(item.id), value - item.quantity);
+			} else {
+				removeItemFromCart(item.id, item.quantity - value);
+			}
+		};
+
 		return (
-			<div className="mx-1 p-2" key={item.name}>
+			<div className="mx-1 p-2" key={item.id}>
 				<Group w="100%" justify="space-between" wrap="nowrap">
 					{title}
 					<Group justify="flex-end" ml="auto">
@@ -141,17 +181,15 @@ export default function Cart() {
 								max={storeItem.count}
 								clampBehavior="strict"
 								startValue={1}
-								onChange={(value: number) => {
-									if (value === item.quantity) return;
-
-									if (value > item.quantity) {
-										addItemToCart(getShopItemData(item.name), value - item.quantity);
-									} else removeItemFromCart(item.name, item.quantity - value);
-								}}
+								onChange={handleQuantityChange}
 								isAllowed={(values) => {
-									const canAffordCash = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Cash;
-									const canAffordCard = CartItems?.reduce((acc, cartitem) => acc + getShopItemData(cartitem.name).price * cartitem.quantity, 0) + price <= Money.Bank;
-									const overWeight = Weight + cartWeight + (storeItem.weight || 0) * values.floatValue > MaxWeight;
+									const newCartValue = CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) + price * (values.floatValue - item.quantity);
+									const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (values.floatValue - item.quantity);
+
+									const canAffordCash = newCartValue <= Money.Cash;
+									const canAffordCard = newCartValue <= Money.Bank;
+									const overWeight = newCartWeight > MaxWeight;
+
 									if (overWeight) {
 										notifications.show({
 											title: "Too Heavy",
@@ -184,7 +222,7 @@ export default function Cart() {
 								color="red"
 								variant="light"
 								onClick={() => {
-									removeItemFromCart(item.name, null, true);
+									removeItemFromCart(item.id, null, true);
 								}}
 							>
 								<FontAwesomeIcon icon={faXmark} />
@@ -208,7 +246,7 @@ export default function Cart() {
 					<Text fw={700} fz={19} component="span">
 						{"Total: "}
 					</Text>
-					${formatMoney(CartItems?.reduce((acc, item) => acc + getShopItemData(item.name).price * item.quantity, 0) || 0)}
+					${formatMoney(CartItems?.reduce((acc, item) => acc + getShopItemData(item.id).price * item.quantity, 0) || 0)}
 				</Text>
 			</div>
 			<div className={`flex h-0 grow flex-col gap-3 ${CartItems?.length > 0 && "overflow-y-auto"}`}>
