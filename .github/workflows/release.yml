@@ -60,10 +60,6 @@ jobs:
         with:
           tag-name: ${{ github.ref_name }}
 
-      - name: Remove .npmrc file
-        run: rm -f .npmrc
-        working-directory: web
-
       - name: Bundle files
         run: |
           cd web
