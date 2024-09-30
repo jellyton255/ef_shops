@@ -9,7 +9,7 @@
 ---@field metadata? table | string metadata for item
 
 ---@type table<string, table<string | number, ShopItem>>
-return {
+local ITEMS = {
 	normal = {
 		{ name = 'water', price = 1, defaultStock = 50, category = 'Snacks' },
 		{ name = 'burger', price = 3, defaultStock = 50, category = 'Snacks' },
@@ -38,3 +38,23 @@ return {
 		{ name = 'radio', price = 85 },
 	},
 }
+local newFormatItems = {}
+for category, categoryItems in pairs(ITEMS) do
+	local newCategoryItems = {}
+
+	for item, data in pairs(categoryItems) do
+		if not data.name then
+			data.name = tostring(item)
+		end
+
+		newCategoryItems[#newCategoryItems + 1] = data
+	end
+
+	table.sort(newCategoryItems, function(a, b)
+		return a.name < b.name
+	end)
+
+	newFormatItems[category] = newCategoryItems
+end
+
+return newFormatItems
