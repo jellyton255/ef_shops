@@ -63,6 +63,17 @@ local mapBySubfield = function(tbl, subfield)
 end
 
 lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchaseData)
+	if not purchaseData then
+		lib.print.warn(GetPlayerName(source) .. " may be attempting to exploit EF-Shops:Server:PurchaseItems.")
+		return false
+	end
+
+	if not purchaseData.shop then
+		lib.print.warn(GetPlayerName(source) .. " may be attempting to exploit EF-Shops:Server:PurchaseItems.")
+		lib.print.warn(purchaseData)
+		return false
+	end
+
 	local player = exports.qbx_core:GetPlayer(source)
 	local shop = ShopData[purchaseData.shop.id][purchaseData.shop.location]
 	local shopType = purchaseData.shop.id
@@ -111,11 +122,12 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 				TriggerClientEvent('ox_lib:notify', source, { title = "The requested amount of " .. itemData.label .. " is no longer in stock.", type = "error" })
 				goto continue
 			end
+
 			if shopItem.jobs then
 				if not shopItem.jobs[player.PlayerData.job.name] then
 					TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the required job to purchase " .. itemData.label .. ".", type = "error" })
 					goto continue
-				end	
+				end
 				if shopItem.jobs[player.PlayerData.job.name] > player.PlayerData.job.grade.level then
 					TriggerClientEvent('ox_lib:notify', source, { title = "You do not have the required grade to purchase " .. itemData.label .. ".", type = "error" })
 					goto continue
