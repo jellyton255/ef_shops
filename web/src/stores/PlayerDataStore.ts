@@ -33,7 +33,6 @@ export const useStoreSelf = create<SelfData>((set) => ({
 	},
 	Licenses: null,
 
-	// Methods for manipulating state
 	setSelfData: (config) => {
 		if (config.weight) {
 			set(() => ({
