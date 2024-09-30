@@ -133,20 +133,22 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 	end
 
 	local itemStrings = {}
+	local itemMetadata = {}
 	for i = 1, #validCartItems do
 		local item = validCartItems[i]
 		local itemData = ITEMS[item.name]
 		itemStrings[#itemStrings + 1] = item.quantity .. "x " .. itemData.label
+		itemMetadata[item.name] = item.quantity
 	end
 	local purchaseReason = table.concat(itemStrings, "; ")
 
 	if currency == "cash" then
-		if not player.Functions.RemoveMoney("cash", totalPrice, shopData.label .. ": " .. purchaseReason) and totalPrice > 0 then
+		if not player.Functions.RemoveMoney("cash", totalPrice, shopData.label .. ": " .. purchaseReason, { type = "purchase:goods", subtype = "convenience", shop = purchaseData.shop.id, items = itemMetadata }) and totalPrice > 0 then
 			TriggerClientEvent('ox_lib:notify', source, { title = "You do not have enough cash for this transaction.", type = "error" })
 			return false
 		end
 	else
-		if not player.Functions.RemoveMoney("bank", totalPrice, shopData.label .. ": " .. purchaseReason) and totalPrice > 0 then
+		if not player.Functions.RemoveMoney("bank", totalPrice, shopData.label .. ": " .. purchaseReason, { type = "purchase:goods", subtype = "convenience", shop = purchaseData.shop.id, items = itemMetadata }) and totalPrice > 0 then
 			TriggerClientEvent('ox_lib:notify', source, { title = "You do not have enough money in the bank for this transaction.", type = "error" })
 			return false
 		end
@@ -198,9 +200,9 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 		else
 			local itemPrice = item.quantity * shop.inventory[item.inventoryIndex].price
 			if currency == "cash" then
-				player.Functions.AddMoney("cash", itemPrice, "REFUND: " .. shopData.label .. ": " .. purchaseReason)
+				player.Functions.AddMoney("cash", itemPrice, "REFUND: " .. shopData.label .. ": " .. purchaseReason, { type = "refund", subtype = "convenience", shop = purchaseData.shop.id })
 			else
-				player.Functions.AddMoney("bank", itemPrice, "REFUND: " .. shopData.label .. ": " .. purchaseReason)
+				player.Functions.AddMoney("bank", itemPrice, "REFUND: " .. shopData.label .. ": " .. purchaseReason, { type = "refund", subtype = "convenience", shop = purchaseData.shop.id })
 			end
 		end
 
