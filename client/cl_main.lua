@@ -95,6 +95,11 @@ exports("OpenShop", function(type)
 end)
 
 RegisterNuiCallback("purchaseItems", function(data, cb)
+	if not data then
+		lib.notify({ title = "Purchase Failed", description = "An error occurred while trying to purchase items.", type = "error" })
+		return
+	end
+
 	local success = lib.callback.await("EF-Shops:Server:PurchaseItems", false, data)
 
 	if not success then
