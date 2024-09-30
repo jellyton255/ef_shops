@@ -1,6 +1,6 @@
 ---@class ShopItem
 ---@field id? number internal id number, do not set
----@field name string item name as referenced in ox_inventory
+---@field name? string item name as referenced in ox_inventory
 ---@field price number base price of the item
 ---@field defaultStock? integer the amount of items available in the shop by default
 ---@field category? string the category of the item in the shop (e.g. 'Snacks', 'Tools', 'Firearms', 'Ammunition', 'Drinks')
@@ -8,7 +8,7 @@
 ---@field jobs? table<string, number> map of group names to min grade required to access the shop
 ---@field metadata? table | string metadata for item
 
----@type table<string, table<string, ShopItem>>
+---@type table<string, table<string | number, ShopItem>>
 return {
 	normal = {
 		{ name = 'water', price = 1, defaultStock = 50, category = 'Snacks' },
