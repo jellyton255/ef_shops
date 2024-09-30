@@ -181,8 +181,7 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 			goto continue
 		end
 
-		local freeSlot = exports.ox_inventory:GetEmptySlot(source)
-		local success, response = ox_inventory:AddItem(source, item.name, item.quantity, productData.metadata, freeSlot)
+		local success, response = ox_inventory:AddItem(source, item.name, item.quantity, productData.metadata)
 		if success then
 			if shop.inventory[item.inventoryIndex].count then
 				shop.inventory[item.inventoryIndex].count = shop.inventory[item.inventoryIndex].count - item.quantity
