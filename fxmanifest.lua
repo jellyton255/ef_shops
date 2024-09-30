@@ -3,7 +3,7 @@ game 'gta5'
 
 name 'Everfall Shops'
 author 'Jellyton'
-version '1.1.1'
+version '1.2.0'
 description 'Everfall shops system. Made with React.'
 license 'GPL-3.0'
 repository 'https://github.com/jellyton69/ef-shops'
