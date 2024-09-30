@@ -11,33 +11,52 @@
 ---@type table<string, table<string | number, ShopItem>>
 local ITEMS = {
 	normal = {
-		{ name = 'water', price = 1, defaultStock = 50, category = 'Snacks' },
-		{ name = 'burger', price = 3, defaultStock = 50, category = 'Snacks' },
-		{ name = 'ecola', price = 3, defaultStock = 50, category = 'Snacks' },
+		water_bottle = { price = 1, defaultStock = 50, category = 'Snacks' },
+		sprunk = { price = 3, defaultStock = 50, category = 'Snacks' },
+		ecola = { price = 3, defaultStock = 50, category = 'Snacks' },
+		redwoodpack = { price = 50, defaultStock = 500 },
+		redwoodwhitespack = { price = 100, defaultStock = 500 },
+		yukonpack = { price = 75, defaultStock = 500 },
+		psandqs = { price = 1, defaultStock = 50, category = 'Snacks' },
+		egochaser = { price = 1, defaultStock = 50, category = 'Snacks' },
+		ambeer = { price = 3, defaultStock = 50, category = 'Snacks' },
+		mm_krunk_blackcherry = { price = 6, defaultStock = 20, category = 'Snacks' },
+		mm_krunk_classic = { price = 6, defaultStock = 20, category = 'Snacks' },
+		mm_krunk_lemonlime = { price = 6, defaultStock = 20, category = 'Snacks' },
+		lighter = { price = 1, defaultStock = 50 },
+		rolling_paper = { price = 1, defaultStock = 5000 },
+		cups = { price = 20, defaultStock = 20 },
 	},
-	liquor = {
-		{ name = 'water', price = 1, defaultStock = 50, category = 'Snacks' },
-		{ name = 'burger', price = 3, defaultStock = 50, category = 'Snacks' },
-		{ name = 'ecola', price = 3, defaultStock = 50, category = 'Snacks' },
+	bar = {
+		water_bottle = { price = 1, defaultStock = 50 },
+		ambeer = { price = 6, defaultStock = 50 },
+		dusche = { price = 6, defaultStock = 50 },
+		pisswasser = { price = 7, defaultStock = 50 },
+		pisswasser2 = { price = 7, defaultStock = 50 },
+		pisswasser3 = { price = 7, defaultStock = 50 },
+		logger = { price = 6, defaultStock = 50 },
+		whiskey = { price = 20, defaultStock = 50 },
+		vodka = { price = 12, defaultStock = 50 }
 	},
 	hardware = {
 		{ name = 'lockpick', price = 20, defaultStock = 50, category = 'Tools' },
 	},
 	weapons = {
-		{ name = 'WEAPON_KNIFE', price = 80, defaultStock = 250, category = 'Point Defense' },
-		{ name = 'WEAPON_BAT', price = 45, defaultStock = 250, category = 'Point Defense' },
-		{ name = 'WEAPON_NIGHTSTICK', price = 500, category = 'Point Defense' },
-		{ name = 'WEAPON_KNUCKLE', price = 950, defaultStock = 250, category = 'Point Defense' },
-		{ name = 'WEAPON_PISTOL', price = 2450, defaultStock = 5, license = "weapon", category = 'Firearms' },
-		{ name = 'WEAPON_SNSPISTOL', price = 1850, defaultStock = 5, license = "weapon", category = 'Firearms' },
-		{ name = 'ammo-9', price = 4, defaultStock = 9500, license = "weapon", category = 'Ammunition' },
-		{ name = 'ammo-45', price = 7, defaultStock = 5500, license = "weapon", category = 'Ammunition' },
+		{ name = 'WEAPON_KNIFE',      price = 80,   defaultStock = 250,        category = 'Point Defense' },
+		{ name = 'WEAPON_BAT',        price = 45,   defaultStock = 250,        category = 'Point Defense' },
+		{ name = 'WEAPON_NIGHTSTICK', price = 500,  category = 'Point Defense' },
+		{ name = 'WEAPON_KNUCKLE',    price = 950,  defaultStock = 250,        category = 'Point Defense' },
+		{ name = 'WEAPON_PISTOL',     price = 2450, defaultStock = 5,          license = "weapon",        category = 'Firearms' },
+		{ name = 'WEAPON_SNSPISTOL',  price = 1850, defaultStock = 5,          license = "weapon",        category = 'Firearms' },
+		{ name = 'ammo-9',            price = 4,    defaultStock = 9500,       license = "weapon",        category = 'Ammunition' },
+		{ name = 'ammo-45',           price = 7,    defaultStock = 5500,       license = "weapon",        category = 'Ammunition' },
 	},
 	electronics = {
 		{ name = 'phone', price = 55 },
 		{ name = 'radio', price = 85 },
 	},
 }
+
 local newFormatItems = {}
 for category, categoryItems in pairs(ITEMS) do
 	local newCategoryItems = {}

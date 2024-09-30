@@ -73,6 +73,8 @@ return {
 			scale = 0.9
 		}
 	},
+
+	-- Rob's Liquor Locations
 	robsliquor = {
 		label = "Rob's Liquor",
 		model = {
@@ -89,13 +91,16 @@ return {
 			vector4(1165.15, 2710.78, 38.16, 177.96),
 			vector4(1134.3, -983.26, 46.42, 276.3),
 			vector4(1744.65, 3611.95, 34.89, 311.19)
+
 		},
-		shopItems = "liquor",
+		shopItems = "bar",
 		blip = {
 			sprite = 827,
 			color = 47,
 		}
 	},
+
+	-- Hardware Store Locations
 	hardware = {
 		label = "Hardware Store",
 		model = {
@@ -122,9 +127,11 @@ return {
 			color = 5,
 		}
 	},
+
+	-- Ammunation Locations
 	ammunation = {
 		label = "Ammunation",
-		targetLabel = "Open Ammunation",
+		target = { label = "Open Ammunation" },
 		model = {
 			`S_M_M_AmmuCountry`,
 			`S_M_Y_AmmuCity_01`,
