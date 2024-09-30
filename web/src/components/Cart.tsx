@@ -1,6 +1,6 @@
 import { faBasketShopping, faCreditCard, faFaceFrown, faMoneyBill1Wave, faWeightHanging, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Text, Stack, Title, Group, ActionIcon, NumberInput, Paper, Badge, Button, NumberFormatter, Tooltip, ScrollArea } from "@mantine/core";
+import { Text, Title, Group, ActionIcon, NumberInput, Button, NumberFormatter, Tooltip, ScrollArea } from "@mantine/core";
 import { useStoreShop } from "../stores/ShopStore";
 import { formatMoney } from "../utils/misc";
 import { useStoreSelf } from "../stores/PlayerDataStore";
@@ -235,7 +235,7 @@ export default function Cart() {
 	});
 
 	return (
-		<div className="col-span-3 flex size-full flex-col justify-between gap-1">
+		<div className="flex h-full w-[25%] min-w-[25%] flex-col justify-between gap-1">
 			<div className="flex justify-between gap-1">
 				<Group gap={10} mx={4}>
 					<FontAwesomeIcon size="lg" icon={faBasketShopping} />

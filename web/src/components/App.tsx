@@ -9,7 +9,7 @@ export default function App() {
 
 	return (
 		<VisibilityProvider>
-			<div className="dark flex h-screen w-screen items-center justify-center">
+			<div className="flex h-screen w-screen items-center justify-center">
 				<div className="h-[82vh] w-3/4 bg-neutral-900/[0.97] p-4 transition-all">
 					<ShopInterface />
 				</div>
@@ -58,16 +58,6 @@ debugData([
 		action: "setShopItems",
 		data: [
 			{
-				id: 1,
-				name: "redwood",
-				category: "Redwood Wights Pack Long",
-				label: "Redwood Wights Pack Long",
-				price: 2,
-				weight: 100,
-				count: 23,
-				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
-			},
-			{
 				id: 2,
 				name: "egochaser",
 				category: "Food",
@@ -110,9 +100,9 @@ debugData([
 				name: "gamng mouse",
 				category: "Electronics",
 				label: "Gaming Mouse",
-				price: 35,
-				weight: 150,
-				count: 5,
+				price: 30005,
+				weight: 15000,
+				count: 5000,
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/gaming_mouse.png",
 			},
 			{

@@ -1,4 +1,4 @@
-import { Tooltip, Grid } from "@mantine/core";
+import { Tooltip } from "@mantine/core";
 import { useStoreShop } from "../stores/ShopStore";
 import { useStoreSelf } from "../stores/PlayerDataStore";
 import { useHover } from "@mantine/hooks";
@@ -33,39 +33,35 @@ export default function ItemCard(props: { item: ShopItem }) {
 			}
 			disabled={!canNotAfford && !overWeight && hasLicense && hasCorrectGrade && inStock}
 		>
-			<Grid.Col span={1} className="grow">
-				<div
-					ref={ref}
-					className={`flex h-full flex-col justify-between rounded-sm bg-neutral-800 p-2 transition-all ${!disabled ? "hover:bg-neutral-600/20" : ""} ${
-						disabled ? "bg-opacity-20" : "bg-opacity-80"
-					} ${disabled ? "cursor-not-allowed" : "cursor-pointer"} ${disabled ? "grayscale" : ""} ${
-						hovered && !disabled ? "scale-105 shadow-md" : ""
-					}`}
-					onClick={() => {
-						if (disabled) return;
-						addItemToCart(item);
-					}}
-				>
-					<div className="mx-auto flex w-full flex-nowrap justify-between px-1">
-						<p className="text-lg font-semibold">${item.price}</p>
-						{item.count !== undefined && <p className="text-lg font-semibold">{item.count}x</p>}
-					</div>
-					<div className="m-auto flex h-[80%]">
-						<img
-							onError={(event: React.SyntheticEvent<HTMLImageElement, Event>) => {
-								console.log(event);
-								event.currentTarget.src = "./Box.png";
-							}}
-							className="h-full w-full object-contain"
-							src={item.imagePath}
-							alt={item.label}
-							//fallbackSrc="./Box.png"
-							//fit="contain"
-						/>
-					</div>
-					<p className="text-md text-center font-semibold">{item.label}</p>
+			<div
+				ref={ref}
+				className={`flex h-full grow flex-col justify-between rounded-sm bg-neutral-800 p-2 transition-all ${!disabled ? "hover:bg-neutral-600/20" : ""} ${
+					disabled ? "bg-opacity-20" : "bg-opacity-80"
+				} ${disabled ? "cursor-not-allowed" : "cursor-pointer"} ${disabled ? "grayscale" : ""} ${hovered && !disabled ? "scale-105 shadow-md" : ""}`}
+				onClick={() => {
+					if (disabled) return;
+					addItemToCart(item);
+				}}
+			>
+				<div className="mx-auto flex w-full items-center justify-between gap-2">
+					<p className="text-lg font-semibold">${item.price}</p>
+					{item.count !== undefined && <p className="text-lg font-semibold">{item.count}x</p>}
 				</div>
-			</Grid.Col>
+				<div className="m-auto h-[80%]">
+					<img
+						onError={(event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+							console.log(event);
+							event.currentTarget.src = "./Box.png";
+						}}
+						className="h-full w-full object-contain"
+						src={item.imagePath}
+						alt={item.label}
+						//fallbackSrc="./Box.png"
+						//fit="contain"
+					/>
+				</div>
+				<p className="text-md text-center font-semibold">{item.label}</p>
+			</div>
 		</Tooltip>
 	);
 }

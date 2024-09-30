@@ -1,4 +1,4 @@
-import { Text, Stack, Title, Grid, Group, NumberFormatter, Badge, CloseButton, Flex } from "@mantine/core";
+import { NumberFormatter, CloseButton } from "@mantine/core";
 import { fetchNui } from "../utils/fetchNui";
 import { useStoreShop } from "../stores/ShopStore";
 import { useStoreSelf } from "../stores/PlayerDataStore";
@@ -45,10 +45,10 @@ function PlayerData() {
 
 export default function ShopInterface() {
 	return (
-		<Stack w="100%" h="100%">
-			<Group h="auto" w="100%" justify="space-between">
+		<div className="flex size-full flex-col gap-1">
+			<div className="flex w-full items-center justify-between gap-2">
 				<ShopTitle />
-				<Group>
+				<div className="flex items-center gap-2">
 					<PlayerData />
 					<CloseButton
 						size="xl"
@@ -56,24 +56,12 @@ export default function ShopInterface() {
 							if (!isEnvBrowser()) fetchNui("hideFrame");
 						}}
 					/>
-				</Group>
-			</Group>
-			<Grid
-				w="100%"
-				h={0}
-				columns={18}
-				style={{ flexGrow: 1 }}
-				styles={{
-					inner: { height: "102%" },
-				}}
-			>
-				<Grid.Col span={13} h="100%">
-					<ShopGrid />
-				</Grid.Col>
-				<Grid.Col span={5} h="100%">
-					<Cart />
-				</Grid.Col>
-			</Grid>
-		</Stack>
+				</div>
+			</div>
+			<div className="flex h-0 w-full grow items-center gap-2">
+				<ShopGrid />
+				<Cart />
+			</div>
+		</div>
 	);
 }
