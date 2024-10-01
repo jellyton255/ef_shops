@@ -1,19 +1,15 @@
-import { Text, ScrollArea, Center, Loader, Title, Tabs } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import { useStoreShop } from "../stores/ShopStore";
 import ItemCard from "./ItemCard";
+import { TooltipProvider } from "./ui/tooltip";
+import Loader from "./Loader";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "./ui/scroll-area";
 
-function ShopTab(props: { tab: string }) {
-	const { tab } = props;
+function ShopTab({ tab }: { tab: string }) {
 	const { categorizedItems } = useStoreShop();
 
-	const itemCards = useMemo(() => categorizedItems[tab]?.map((item) => <ItemCard key={item.id} item={item} />), [categorizedItems, tab]);
-
-	return (
-		<ScrollArea scrollbarSize={4} className="h-0 grow pb-4">
-			<div className="grid h-0 w-full grow grid-cols-7 gap-3 px-4">{itemCards}</div>
-		</ScrollArea>
-	);
+	return useMemo(() => categorizedItems[tab]?.map((item) => <ItemCard key={item.id} item={item} />), [categorizedItems, tab]);
 }
 
 export default function ShopGrid() {
@@ -26,32 +22,36 @@ export default function ShopGrid() {
 
 	if (!ShopItems)
 		return (
-			<Center h="100%">
+			<div className="flex size-full flex-col items-center justify-center">
 				<Loader />
-			</Center>
+			</div>
 		);
 
 	if (ShopItems.length <= 0)
 		return (
-			<Center h="100%">
-				<Title>There are no items in this shop!</Title>
-			</Center>
+			<div className="flex size-full scroll-m-20 flex-col items-center justify-center text-2xl font-semibold tracking-tight">
+				There are no items in this shop!
+			</div>
 		);
 
 	return (
-		<Tabs value={activeTab} onChange={setActiveTab} className="flex size-full flex-col" classNames={{ panel: "h-0 grow flex flex-col p-0" }}>
-			<Tabs.List>
+		<Tabs value={activeTab} onValueChange={setActiveTab} className="flex size-full flex-col">
+			<TabsList className="justify-start bg-transparent">
 				{Object.keys(categorizedItems).map((category) => (
-					<Tabs.Tab value={category} key={category}>
-						<Text fw={700} fz={15} lh={1}>
-							{category}
-						</Text>
-					</Tabs.Tab>
+					<TabsTrigger value={category} key={category} className="rounded-none border-primary data-[state=active]:border-b-2">
+						{category}
+					</TabsTrigger>
 				))}
-			</Tabs.List>
-			<Tabs.Panel value={activeTab} py="md" h="100%" w="100%">
-				<ShopTab tab={activeTab} />
-			</Tabs.Panel>
+			</TabsList>
+			<TabsContent value={activeTab} className="flex size-full flex-col">
+				<ScrollArea className="h-0 grow">
+					<div className="grid h-full w-full grow grid-cols-7 gap-3 px-4">
+						<TooltipProvider delayDuration={0} disableHoverableContent={true}>
+							<ShopTab tab={activeTab} />
+						</TooltipProvider>
+					</div>
+				</ScrollArea>
+			</TabsContent>
 		</Tabs>
 	);
 }

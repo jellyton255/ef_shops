@@ -1,13 +1,13 @@
-import { NumberFormatter, CloseButton } from "@mantine/core";
+import Cart from "./Cart";
+import ShopGrid from "./ShopGrid";
 import { fetchNui } from "../utils/fetchNui";
 import { useStoreShop } from "../stores/ShopStore";
 import { useStoreSelf } from "../stores/PlayerDataStore";
 import { faCreditCard, faMoneyBill1Wave, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Cart from "./Cart";
-import ShopGrid from "./ShopGrid";
-import { isEnvBrowser } from "../utils/misc";
+import { formatMoney, isEnvBrowser } from "../utils/misc";
 import { Skeleton } from "./ui/skeleton";
+import { Button } from "./ui/button";
 
 function ShopTitle() {
 	const { CurrentShop } = useStoreShop();
@@ -31,13 +31,13 @@ function PlayerData() {
 
 	return (
 		<div className="flex gap-2">
-			<p className="flex items-center gap-2 rounded-md bg-green-700/50 px-5 py-1 text-lg font-bold leading-none text-green-300">
+			<p className="flex items-center gap-2 rounded-md bg-green-700/20 px-5 py-1 text-lg font-bold leading-none text-green-400">
 				<FontAwesomeIcon size="xl" icon={faMoneyBill1Wave} />
-				<NumberFormatter prefix="$" value={Money.Cash} thousandSeparator decimalScale={0} />
+				{"$" + formatMoney(Money.Cash)}
 			</p>
-			<p className="flex items-center gap-2 rounded-md bg-blue-600/30 px-5 py-1 text-lg font-bold leading-none text-blue-300">
+			<p className="flex items-center gap-2 rounded-md bg-blue-600/20 px-5 py-1 text-lg font-bold leading-none text-blue-400">
 				<FontAwesomeIcon size="xl" icon={faCreditCard} />
-				<NumberFormatter prefix="$" value={Money.Bank} thousandSeparator decimalScale={0} />
+				{"$" + formatMoney(Money.Bank)}
 			</p>
 		</div>
 	);
@@ -50,12 +50,15 @@ export default function ShopInterface() {
 				<ShopTitle />
 				<div className="flex items-center gap-2">
 					<PlayerData />
-					<CloseButton
-						size="xl"
+					<Button
+						size="icon"
+						variant="ghost"
 						onClick={() => {
 							if (!isEnvBrowser()) fetchNui("hideFrame");
 						}}
-					/>
+					>
+						<FontAwesomeIcon icon={faXmark} className="p-2" size="xl" />
+					</Button>
 				</div>
 			</div>
 			<div className="flex h-0 w-full grow items-center gap-2">

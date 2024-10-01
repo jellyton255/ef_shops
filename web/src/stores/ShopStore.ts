@@ -2,12 +2,12 @@ import { create } from "zustand";
 import { CartItem, Shop, ShopItem } from "../types/ShopItem";
 
 type ShopItems = {
-	CurrentShop: Shop;
-	ShopItems: ShopItem[] | null;
-	categorizedItems: Record<string, ShopItem[]>; // New state for categorized items
+	CurrentShop?: Shop;
+	ShopItems?: ShopItem[];
+	categorizedItems: Record<string, ShopItem[]>;
 	CartItems: CartItem[];
-	cartWeight: number; // New state for tracking cart weight
-	cartValue: number; // New state for tracking cart value
+	cartWeight: number;
+	cartValue: number;
 	setCurrentShop: (shop: Shop) => void;
 	setShopItems: (items: ShopItem[]) => void;
 	addItemToCart: (item: ShopItem, amount?: number) => void;
@@ -18,12 +18,12 @@ type ShopItems = {
 
 export const useStoreShop = create<ShopItems>((set, get) => ({
 	// Initial State
-	CurrentShop: null,
-	ShopItems: null,
-	categorizedItems: {}, // Initialize categorized items
+	CurrentShop: undefined,
+	ShopItems: undefined,
+	categorizedItems: {},
 	CartItems: [],
-	cartWeight: 0, // Initialize cart weight
-	cartValue: 0, // Initialize cart value
+	cartWeight: 0,
+	cartValue: 0,
 
 	setCurrentShop: (shop: Shop) => {
 		set(() => ({
@@ -44,7 +44,7 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 
 		set(() => ({
 			ShopItems: [...items],
-			categorizedItems, // Update categorized items
+			categorizedItems,
 		}));
 	},
 
@@ -52,13 +52,13 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 		const { CartItems, cartWeight, cartValue } = get();
 		const existingItemIndex = CartItems.findIndex((cartItem) => cartItem.id === item.id);
 
-		let newCartWeight = cartWeight + item.weight * (amount || 1); // Update cart weight
-		let newCartValue = cartValue + item.price * (amount || 1); // Update cart value
+		const newCartWeight = cartWeight + (item.weight || 0) * (amount || 1);
+		const newCartValue = cartValue + (item.price || 0) * (amount || 1);
 
 		if (existingItemIndex >= 0) {
 			// Item already exists in cart, increase quantity and update weight and value
-			const updatedCartItems = CartItems.map((cartItem, index) => 
-				index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem
+			const updatedCartItems = CartItems.map((cartItem, index) =>
+				index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity + (amount || 1) } : cartItem,
 			);
 			set(() => ({
 				CartItems: updatedCartItems,
@@ -83,13 +83,13 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 		if (existingItemIndex >= 0) {
 			const existingItem = CartItems[existingItemIndex];
 			const shopItem = getShopItemData(existingItem.id);
-			let itemWeightReduction = shopItem.weight * (removeAll ? existingItem.quantity : amount || 1);
-			let itemValueReduction = shopItem.price * (removeAll ? existingItem.quantity : amount || 1);
+			const itemWeightReduction = (shopItem.weight || 0) * (removeAll ? existingItem.quantity : amount || 1);
+			const itemValueReduction = (shopItem.price || 0) * (removeAll ? existingItem.quantity : amount || 1);
 
 			if (existingItem.quantity > 1 && !removeAll) {
 				// Decrease quantity, update weight and value
-				const updatedCartItems = CartItems.map((cartItem, index) => 
-					index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem
+				const updatedCartItems = CartItems.map((cartItem, index) =>
+					index === existingItemIndex ? { ...cartItem, quantity: cartItem.quantity - (amount || 1) } : cartItem,
 				);
 				set(() => ({
 					CartItems: updatedCartItems,
@@ -111,8 +111,8 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 	clearCart: () => {
 		set(() => ({
 			CartItems: [],
-			cartWeight: 0, // Reset cart weight
-			cartValue: 0, // Reset cart value
+			cartWeight: 0,
+			cartValue: 0,
 		}));
 	},
 
@@ -121,6 +121,6 @@ export const useStoreShop = create<ShopItems>((set, get) => ({
 		if (ShopItems) {
 			return ShopItems.find((item) => item.id === itemId);
 		}
-		return undefined; // Return undefined if the item is not found or if ShopItems is null
+		return undefined;
 	},
 }));

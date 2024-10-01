@@ -1,13 +1,18 @@
 import { faBasketShopping, faCreditCard, faFaceFrown, faMoneyBill1Wave, faWeightHanging, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Text, Title, Group, ActionIcon, NumberInput, Button, NumberFormatter, Tooltip, ScrollArea } from "@mantine/core";
 import { useStoreShop } from "../stores/ShopStore";
 import { formatMoney } from "../utils/misc";
 import { useStoreSelf } from "../stores/PlayerDataStore";
 import { useState } from "react";
 import { fetchNui } from "../utils/fetchNui";
-import { notifications } from "@mantine/notifications";
-import classes from "./Style.module.css";
+import { Button } from "./ui/button";
+import NumberInput from "./ui/number-input";
+import Loader from "./Loader";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipPortal } from "@radix-ui/react-tooltip";
+import { ScrollArea } from "./ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const formatWeight = (weight: number) => {
 	weight *= 0.001;
@@ -33,7 +38,6 @@ function PaymentButtons() {
 	const overWeight = Weight + cartWeight > MaxWeight;
 
 	function finishPurchase() {
-		// Create a new array with updated quantities
 		const updatedShopItems = ShopItems.map((shopItem) => {
 			const cartItem = CartItems.find((item) => item.id === shopItem.id);
 			if (cartItem) {
@@ -44,7 +48,6 @@ function PaymentButtons() {
 			return shopItem;
 		});
 
-		// Update the state
 		setShopItems(updatedShopItems);
 
 		clearCart();
@@ -53,65 +56,92 @@ function PaymentButtons() {
 	return (
 		<div className="flex w-full flex-col justify-between">
 			{(awaitingPaymentCash || awaitingPaymentCard) && <div className="container" />}
-			<div className="flex w-full">
-				<Tooltip label={getToolTip(canAffordCash, overWeight) || "Pay with Cash"} color={(canAffordCash && !overWeight && "green") || "red"} withArrow hidden={!CartItems || CartItems.length == 0}>
-					<Button
-						className="grow"
-						color="green"
-						size="lg"
-						variant="light"
-						loading={awaitingPaymentCash}
-						disabled={!CartItems || CartItems.length == 0 || !canAffordCash || awaitingPaymentCard || overWeight}
-						style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
-						onClick={() => {
-							setAwaitingPaymentCash(true);
-							fetchNui("purchaseItems", { items: CartItems, shop: CurrentShop, currency: "cash" }, true).then((res) => {
-								setAwaitingPaymentCash(false);
-								if (res) {
-									finishPurchase();
-									clearCart();
-								}
-							});
-						}}
-					>
-						<FontAwesomeIcon size="lg" icon={faMoneyBill1Wave} />
-					</Button>
-				</Tooltip>
-				<Tooltip label={getToolTip(canAffordCard, overWeight) || "Pay with Card"} color={(canAffordCard && !overWeight && "blue") || "red"} withArrow hidden={!CartItems || CartItems.length == 0}>
-					<Button
-						className="grow"
-						color="blue"
-						size="lg"
-						variant="light"
-						loading={awaitingPaymentCard}
-						disabled={!CartItems || CartItems.length == 0 || !canAffordCard || awaitingPaymentCash || overWeight}
-						style={{ borderBottomLeftRadius: 0, borderTopLeftRadius: 0 }}
-						onClick={() => {
-							setAwaitingPaymentCard(true);
-							fetchNui("purchaseItems", { items: CartItems, shop: CurrentShop, currency: "card" }, true).then((res) => {
-								setAwaitingPaymentCard(false);
-								if (res) {
-									finishPurchase();
-									clearCart();
-								}
-							});
-						}}
-					>
-						<FontAwesomeIcon size="lg" icon={faCreditCard} />
-					</Button>
-				</Tooltip>
-			</div>
-			<p className="mt-1 flex items-center justify-center gap-1 rounded-sm bg-indigo-800/25 px-2 py-1 text-lg font-medium text-indigo-400">
-				<FontAwesomeIcon size="xs" icon={faWeightHanging} />
-				<NumberFormatter value={formatWeight(Weight)} suffix="kg" thousandSeparator />
-				{cartWeight > 0 && (
-					<span className="font-bold">
-						<NumberFormatter value={formatWeight(cartWeight)} prefix=" + " suffix="kg" thousandSeparator />
-					</span>
-				)}
-				{" / "}
-				<NumberFormatter value={formatWeight(MaxWeight)} suffix="kg" thousandSeparator />
-			</p>
+			<TooltipProvider delayDuration={0} disableHoverableContent>
+				<div className="flex w-full">
+					<Tooltip>
+						<TooltipPortal>
+							{CartItems && CartItems.length > 0 && (
+								<TooltipContent
+									side="top"
+									sideOffset={5}
+									className={cn(
+										"rounded-md",
+										(canAffordCash && !overWeight && "bg-green-700/20 text-green-300") || "bg-red-700/20 text-red-300",
+									)}
+								>
+									{getToolTip(canAffordCash, overWeight) || "Pay with Cash"}
+								</TooltipContent>
+							)}
+						</TooltipPortal>
+						<TooltipTrigger asChild>
+							<Button
+								className="grow bg-green-700/20 text-green-300 hover:bg-green-800/20 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:brightness-50 data-[disabled=true]:hover:bg-green-700/20"
+								variant="secondary"
+								data-disabled={!CartItems || CartItems.length == 0 || !canAffordCash || awaitingPaymentCard || overWeight}
+								style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
+								onClick={() => {
+									if (!CartItems || CartItems.length == 0 || !canAffordCash || awaitingPaymentCard || overWeight) return;
+
+									setAwaitingPaymentCash(true);
+									fetchNui("purchaseItems", { items: CartItems, shop: CurrentShop, currency: "cash" }, true).then((res) => {
+										setAwaitingPaymentCash(false);
+										if (res) {
+											finishPurchase();
+											clearCart();
+										}
+									});
+								}}
+							>
+								{awaitingPaymentCash ? <Loader /> : <FontAwesomeIcon size="lg" icon={faMoneyBill1Wave} />}
+							</Button>
+						</TooltipTrigger>
+					</Tooltip>
+					<Tooltip>
+						<TooltipPortal>
+							{CartItems && CartItems.length > 0 && (
+								<TooltipContent
+									side="top"
+									sideOffset={5}
+									className={cn(
+										"rounded-md",
+										(canAffordCard && !overWeight && "bg-blue-700/20 text-blue-300") || "bg-red-700/20 text-red-300",
+									)}
+								>
+									{getToolTip(canAffordCard, overWeight) || "Pay with Card"}
+								</TooltipContent>
+							)}
+						</TooltipPortal>
+						<TooltipTrigger asChild>
+							<Button
+								className="grow bg-blue-700/20 text-blue-300 hover:bg-blue-800/20 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:brightness-50 data-[disabled=true]:hover:bg-blue-700/20"
+								variant="secondary"
+								data-disabled={!CartItems || CartItems.length == 0 || !canAffordCard || awaitingPaymentCash || overWeight}
+								style={{ borderBottomLeftRadius: 0, borderTopLeftRadius: 0 }}
+								onClick={() => {
+									if (!CartItems || CartItems.length == 0 || !canAffordCard || awaitingPaymentCash || overWeight) return;
+
+									setAwaitingPaymentCard(true);
+									fetchNui("purchaseItems", { items: CartItems, shop: CurrentShop, currency: "card" }, true).then((res) => {
+										setAwaitingPaymentCard(false);
+										if (res) {
+											finishPurchase();
+											clearCart();
+										}
+									});
+								}}
+							>
+								{awaitingPaymentCash ? <Loader /> : <FontAwesomeIcon size="lg" icon={faCreditCard} />}
+							</Button>
+						</TooltipTrigger>
+					</Tooltip>
+				</div>
+				<p className="mt-1 flex items-center justify-center gap-1 rounded-sm bg-indigo-800/20 px-2 py-1 text-lg font-medium text-indigo-400">
+					<FontAwesomeIcon size="xs" icon={faWeightHanging} />
+					{formatWeight(Weight) + "kg"}
+					{cartWeight > 0.0 && <span className="font-bold">{" + " + formatWeight(cartWeight) + "kg"}</span>}
+					{" / " + formatWeight(MaxWeight) + "kg"}
+				</p>
+			</TooltipProvider>
 		</div>
 	);
 }
@@ -120,134 +150,22 @@ export default function Cart() {
 	const { CartItems, addItemToCart, removeItemFromCart, getShopItemData, cartWeight } = useStoreShop();
 	const { Money, Weight, MaxWeight } = useStoreSelf();
 
-	const currentCartItems = CartItems?.map((item) => {
-		const storeItem = getShopItemData(item.id);
-		var price = storeItem.price;
-		var title = <Title order={5}>{storeItem.label}</Title>;
-
-		const handleQuantityChange = (value: number) => {
-			if (value === item.quantity) return;
-
-			const newCartValue = CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) + price * (value - item.quantity);
-			const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (value - item.quantity);
-
-			const canAffordCash = newCartValue <= Money.Cash;
-			const canAffordCard = newCartValue <= Money.Bank;
-			const overWeight = newCartWeight > MaxWeight;
-
-			if (overWeight) {
-				notifications.show({
-					title: "Too Heavy",
-					message: `You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`,
-					icon: <FontAwesomeIcon icon={faWeightHanging} />,
-					color: "red",
-					classNames: classes,
-				});
-				return;
-			}
-
-			if (!canAffordCash && !canAffordCard) {
-				notifications.show({
-					title: "Cannot Afford",
-					message: `You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`,
-					icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
-					color: "red",
-					classNames: classes,
-				});
-				return;
-			}
-
-			if (value > item.quantity) {
-				addItemToCart(getShopItemData(item.id), value - item.quantity);
-			} else {
-				removeItemFromCart(item.id, item.quantity - value);
-			}
-		};
-
-		return (
-			<div className="mx-1 p-2" key={item.id}>
-				<Group w="100%" justify="space-between" wrap="nowrap">
-					{title}
-					<Group justify="flex-end" ml="auto">
-						<Text fz={18} fw={500}>
-							${formatMoney(price * item.quantity)}
-						</Text>
-
-						<Group gap={6}>
-							<NumberInput
-								w={60}
-								size="xs"
-								value={item.quantity}
-								max={storeItem.count}
-								clampBehavior="strict"
-								startValue={1}
-								onChange={handleQuantityChange}
-								isAllowed={(values) => {
-									const newCartValue = CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) + price * (values.floatValue - item.quantity);
-									const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (values.floatValue - item.quantity);
-
-									const canAffordCash = newCartValue <= Money.Cash;
-									const canAffordCard = newCartValue <= Money.Bank;
-									const overWeight = newCartWeight > MaxWeight;
-
-									if (overWeight) {
-										notifications.show({
-											title: "Too Heavy",
-											message: `You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`,
-											icon: <FontAwesomeIcon icon={faWeightHanging} />,
-											color: "red",
-											classNames: classes,
-										});
-										return false;
-									}
-
-									if (!canAffordCash && !canAffordCard) {
-										notifications.show({
-											title: "Cannot Afford",
-											message: `You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`,
-											icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
-											color: "red",
-											classNames: classes,
-										});
-										return false;
-									}
-
-									return true;
-								}}
-								min={1}
-								allowDecimal={false}
-								allowNegative={false}
-							/>
-							<ActionIcon
-								color="red"
-								variant="light"
-								onClick={() => {
-									removeItemFromCart(item.id, null, true);
-								}}
-							>
-								<FontAwesomeIcon icon={faXmark} />
-							</ActionIcon>
-						</Group>
-					</Group>
-				</Group>
-			</div>
-		);
-	});
+	const cartPrice = CartItems?.reduce((acc, item) => acc + getShopItemData(item.id).price * item.quantity, 0);
 
 	return (
 		<div className="flex h-full w-[25%] min-w-[25%] flex-col justify-between gap-1">
 			<div className="flex justify-between gap-1">
-				<Group gap={10} mx={4}>
+				<div className="mx-2 flex items-center gap-2 leading-none">
 					<FontAwesomeIcon size="lg" icon={faBasketShopping} />
-					<Title order={3}>Cart</Title>
-				</Group>
+					<h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">Cart</h3>
+				</div>
 
-				<Text fz={18} fw={500} mx={4}>
-					<Text fw={700} fz={19} component="span">
+				{CartItems && CartItems.length > 0 && (
+					<div className="mx-2 my-auto text-xl font-semibold tracking-tight">
 						{"Total: "}
-					</Text>
-					${formatMoney(CartItems?.reduce((acc, item) => acc + getShopItemData(item.id).price * item.quantity, 0) || 0)}
-				</Text>
+						<span className="font-bold">{cartPrice == 0 ? "FREE" : "$" + formatMoney(cartPrice)}</span>
+					</div>
+				)}
 			</div>
 			<div className={`flex h-0 grow flex-col gap-3 ${CartItems?.length > 0 && "overflow-y-auto"}`}>
 				{CartItems?.length <= 0 ? (
@@ -256,8 +174,103 @@ export default function Cart() {
 						<h1 className="text-2xl font-bold">No Items in Cart</h1>
 					</div>
 				) : (
-					<ScrollArea h="100%" scrollbarSize={4}>
-						{currentCartItems}
+					<ScrollArea className="h-full">
+						{CartItems?.map((item) => {
+							const storeItem = getShopItemData(item.id);
+							const price = storeItem.price;
+
+							const handleQuantityChange = (value: number) => {
+								if (value === item.quantity) return;
+
+								const newCartValue =
+									CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) +
+									price * (value - item.quantity);
+								const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (value - item.quantity);
+
+								const canAffordCash = newCartValue <= Money.Cash;
+								const canAffordCard = newCartValue <= Money.Bank;
+								const overWeight = newCartWeight > MaxWeight;
+
+								if (overWeight) {
+									toast.error(`You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`, {
+										icon: <FontAwesomeIcon icon={faWeightHanging} />,
+									});
+									return;
+								}
+
+								if (!canAffordCash && !canAffordCard) {
+									toast.error(`You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`, {
+										icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
+									});
+									return;
+								}
+
+								if (value > item.quantity) {
+									addItemToCart(getShopItemData(item.id), value - item.quantity);
+								} else {
+									removeItemFromCart(item.id, item.quantity - value);
+								}
+							};
+
+							return (
+								<div className="mx-1 p-2" key={item.id}>
+									<div className="flex w-full flex-nowrap items-center justify-between">
+										<div className="font-semibold tracking-tight">{storeItem.label}</div>
+										<div className="flex w-min shrink flex-nowrap items-center gap-2 font-semibold tracking-tight">
+											<div>${formatMoney(price * item.quantity)}</div>
+											<div className="flex flex-nowrap items-center gap-1">
+												<NumberInput
+													value={item.quantity}
+													max={storeItem.count}
+													clampBehavior="strict"
+													startValue={1}
+													onChange={handleQuantityChange}
+													isAllowed={(values) => {
+														const newCartValue =
+															CartItems.reduce((acc, cartitem) => acc + getShopItemData(cartitem.id).price * cartitem.quantity, 0) +
+															price * (values.floatValue - item.quantity);
+														const newCartWeight = Weight + cartWeight + (storeItem.weight || 0) * (values.floatValue - item.quantity);
+
+														const canAffordCash = newCartValue <= Money.Cash;
+														const canAffordCard = newCartValue <= Money.Bank;
+														const overWeight = newCartWeight > MaxWeight;
+
+														if (overWeight) {
+															toast.error(`You cannot add anymore of: ${storeItem.label} to your cart, it's too heavy!`, {
+																icon: <FontAwesomeIcon icon={faWeightHanging} />,
+															});
+
+															return false;
+														}
+
+														if (!canAffordCash && !canAffordCard) {
+															toast.error(`You cannot add anymore of: ${storeItem.label} to your cart, you cannot afford it!`, {
+																icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
+															});
+															return false;
+														}
+
+														return true;
+													}}
+													min={1}
+													allowDecimal={false}
+													allowNegative={false}
+												/>
+												<Button
+													className="size-8 bg-red-700/20 text-red-300 hover:bg-red-800/20"
+													variant="secondary"
+													onClick={() => {
+														removeItemFromCart(item.id, null, true);
+													}}
+												>
+													<FontAwesomeIcon icon={faXmark} size="lg" />
+												</Button>
+											</div>
+										</div>
+									</div>
+								</div>
+							);
+						})}
 					</ScrollArea>
 				)}
 			</div>

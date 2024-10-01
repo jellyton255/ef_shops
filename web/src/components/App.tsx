@@ -10,7 +10,7 @@ export default function App() {
 	return (
 		<VisibilityProvider>
 			<div className="flex h-screen w-screen items-center justify-center">
-				<div className="h-[82vh] w-3/4 bg-neutral-900/[0.97] p-4 transition-all">
+				<div className="h-[82vh] w-3/4 bg-background/[0.97] p-4 transition-all">
 					<ShopInterface />
 				</div>
 			</div>
@@ -62,7 +62,7 @@ debugData([
 				name: "egochaser",
 				category: "Food",
 				label: "Ego Chaser",
-				price: 2,
+				price: 0,
 				count: 5,
 				imagePath: "https://files.jellyton.me/ShareX/2024/02/egochaser.png",
 			},

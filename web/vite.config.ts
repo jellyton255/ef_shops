@@ -16,7 +16,7 @@ export default defineConfig({
 						const moduleName = splitId.includes("/") ? splitId.split("/")[0] : splitId;
 
 						// Define partial names to target for separate chunking
-						const targetedPartials = ["lodash", "moment", "fortawesome", "mantine", "tabler"];
+						const targetedPartials = ["lodash", "moment", "fortawesome", "tabler"];
 
 						// Find the first partial that matches the module name
 						const matchingPartial = targetedPartials.find((partial) => moduleName.includes(partial));

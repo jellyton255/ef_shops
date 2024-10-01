@@ -2,7 +2,7 @@ import React, { Context, createContext, useContext, useEffect, useState } from "
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { fetchNui } from "../utils/fetchNui";
 import { isEnvBrowser } from "../utils/misc";
-import { Transition } from "@mantine/core";
+import { motion } from "framer-motion";
 
 const VisibilityCtx = createContext<VisibilityProviderValue | null>(null);
 
@@ -11,8 +11,6 @@ interface VisibilityProviderValue {
 	visible: boolean;
 }
 
-// This should be mounted at the top level of your application, it is currently set to
-// apply a CSS visibility value. If this is non-performant, this should be customized.
 export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [visible, setVisible] = useState(false);
 
@@ -40,10 +38,16 @@ export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 			value={{
 				visible,
 				setVisible,
-			}}>
-			<Transition mounted={visible} transition="pop" duration={200} timingFunction="ease">
-				{(styles) => <div style={{ height: "100%", ...styles }}>{children}</div>}
-			</Transition>
+			}}
+		>
+			<motion.div
+				initial={{ opacity: 0, scale: 0.8 }}
+				animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.8 }}
+				transition={{ duration: 0.2, ease: "easeInOut" }}
+				style={{ height: "100%" }}
+			>
+				{children}
+			</motion.div>
 		</VisibilityCtx.Provider>
 	);
 };

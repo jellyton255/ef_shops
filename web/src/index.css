@@ -1,38 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
 	:root {
-		--background: 0 0% 3.9%;
-		--foreground: 0 0% 98%;
-
-		--card: 0 0% 3.9%;
-		--card-foreground: 0 0% 98%;
-
-		--popover: 0 0% 3.9%;
-		--popover-foreground: 0 0% 98%;
-
-		--primary: 0 0% 98%;
-		--primary-foreground: 0 0% 9%;
-
-		--secondary: 0 0% 14.9%;
-		--secondary-foreground: 0 0% 98%;
-
-		--muted: 0 0% 14.9%;
-		--muted-foreground: 0 0% 63.9%;
-
-		--accent: 0 0% 14.9%;
-		--accent-foreground: 0 0% 98%;
-
-		--destructive: 0 62.8% 30.6%;
+		--background: 0 0% 100%;
+		--foreground: 240 10% 3.9%;
+		--card: 0 0% 90%;
+		--card-foreground: 240 10% 3.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 240 10% 3.9%;
+		--primary: 240 5.9% 10%;
+		--primary-foreground: 0 0% 98%;
+		--secondary: 240 4.8% 95.9%;
+		--secondary-foreground: 240 5.9% 10%;
+		--muted: 240 4.8% 95.9%;
+		--muted-foreground: 240 3.8% 46.1%;
+		--accent: 240 4.8% 95.9%;
+		--accent-foreground: 240 5.9% 10%;
+		--destructive: 0 72.22% 50.59%;
 		--destructive-foreground: 0 0% 98%;
-
-		--border: 0 0% 14.9%;
-		--input: 0 0% 14.9%;
-		--ring: 0 0% 83.1%;
-
+		--border: 240 5.9% 90%;
+		--input: 240 5.9% 90%;
+		--ring: 240 5% 64.9%;
 		--radius: 0.5rem;
+
+		--chart-1: 12 76% 61%;
+		--chart-2: 173 58% 39%;
+		--chart-3: 197 37% 24%;
+		--chart-4: 43 74% 66%;
+		--chart-5: 27 87% 67%;
+
+		--color-everfall-50: 193 194 197;
+		--color-everfall-100: 166 167 171;
+		--color-everfall-200: 144 146 150;
+		--color-everfall-300: 92 95 102;
+		--color-everfall-400: 55 58 64;
+		--color-everfall-500: 44 46 51;
+		--color-everfall-600: 40 41 44;
+		--color-everfall-650: 36 37 40;
+		--color-everfall-700: 25 25 26;
+		--color-everfall-800: 18 19 19;
+		--color-everfall-900: 9 9 9;
+	}
+
+	.dark {
+		--background: 300 3% 7%;
+		--foreground: 0 0% 98%;
+		--card: 300 3% 12%;
+		--card-foreground: 0 0% 98%;
+		--popover: 240 10% 3.9%;
+		--popover-foreground: 0 0% 98%;
+		--primary: 0 0% 98%;
+		--primary-foreground: 240 5.9% 10%;
+		--secondary: 240 3.7% 15.9%;
+		--secondary-foreground: 0 0% 98%;
+		--muted: 240 3.7% 15.9%;
+		--muted-foreground: 240 5% 64.9%;
+		--accent: 240 3.7% 15.9%;
+		--accent-foreground: 0 0% 98%;
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 0 85.7% 97.3%;
+		--border: 240 3.7% 15.9%;
+		--input: 240 3.7% 15.9%;
+		--ring: 240 4.9% 83.9%;
+
+		--chart-1: 220 70% 50%;
+		--chart-2: 160 60% 45%;
+		--chart-3: 30 80% 55%;
+		--chart-4: 280 65% 60%;
+		--chart-5: 340 75% 55%;
 	}
 }
 
@@ -43,22 +83,22 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+	div,
+	button {
+		@apply text-foreground;
+	}
 }
 
 body {
 	margin: 0;
-	user-select: none;
+	background: none !important;
 	background-color: transparent !important;
 	overflow: hidden;
-}
-
-:root {
-	color-scheme: only light !important;
+	user-select: none;
 }
 
 #root {
 	height: 100%;
-	background-color: transparent !important;
 }
 
 /* width */
@@ -69,18 +109,12 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-	background: rgb(95, 95, 95);
+	background: rgb(34, 34, 34);
 	border-radius: 3px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #888;
+	background: #3a3a3a;
 	border-radius: 3px;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
 }
