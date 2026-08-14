@@ -197,6 +197,11 @@ lib.callback.register("EF-Shops:Server:PurchaseItems", function(source, purchase
 
 		local success, response = ox_inventory:AddItem(source, item.name, item.quantity, productData.metadata)
 		if success then
+
+			if item.name:find("WEAPON_", 1, true) and shopType == "ammunation" and response[1].metadata.serial then
+				exports['ps-mdt']:registerWeapon(player.PlayerData.citizenid, item.name,  response[1].metadata.serial, "Bought at Ammunation")
+			end
+				
 			if shop.inventory[item.inventoryIndex].count then
 				shop.inventory[item.inventoryIndex].count = shop.inventory[item.inventoryIndex].count - item.quantity
 			end
